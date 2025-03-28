@@ -1,68 +1,82 @@
+@font-face {
+  font-family: "Nike Futura ND";
+  src: url("a8d7b985e4eb8c5d34f2302ffe83e917.eot");
+  src: url("a8d7b985e4eb8c5d34f2302ffe83e917.eot?#iefix")
+      format("embedded-opentype"),
+    url("a8d7b985e4eb8c5d34f2302ffe83e917.woff") format("woff"),
+    url("a8d7b985e4eb8c5d34f2302ffe83e917.woff2") format("woff2"),
+    url("a8d7b985e4eb8c5d34f2302ffe83e917.ttf") format("truetype"),
+    url("a8d7b985e4eb8c5d34f2302ffe83e917.svg#Nike Futura ND") format("svg");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
 * {
-    font-family: "Helvetica Now Text Medium", "Helvetica", "Arial", "sans-serif";
+  font-family: "Helvetica";
 }
 
 body {
-    overflow-x: hidden;
+  overflow-x: hidden;
 }
 
 .mini-header {
-    height: 36px;
-    background-color: #f5f5f5;
-    display: flex;
-    justify-content: right;
-    align-items: center;
-    padding: 0 60px;
-    gap: 10px;
-    font-size: smaller;
+  height: 36px;
+  background-color: #f5f5f5;
+  display: flex;
+  justify-content: right;
+  align-items: center;
+  padding: 0 60px;
+  gap: 10px;
+  font-size: smaller;
 }
 
-.mini-header>div {
-    width: 1px;
-    height: 12px;
-    background-color: black;
+.mini-header > div {
+  width: 1px;
+  height: 12px;
+  background-color: black;
 }
 
-.mini-header>a {
-    color: rgb(0, 0, 0);
-    text-decoration: none;
+.mini-header > a {
+  color: rgb(0, 0, 0);
+  text-decoration: none;
 }
 
-.mini-header>a:hover {
-    color: rgba(0, 0, 0, 0.5);
+.mini-header > a:hover {
+  color: rgba(0, 0, 0, 0.5);
 }
 
 header {
-    padding: 0 60px;
-    height: 60px;
-    display: flex;
-    justify-content: center;
-    position: relative;
+  padding: 0 60px;
+  height: 60px;
+  display: flex;
+  justify-content: center;
+  position: relative;
 }
 
-header>img {
-    height: 60px;
-    width: 60px;
-    position: absolute;
-    left: 60px;
+header > img {
+  height: 60px;
+  width: 60px;
+  position: absolute;
+  left: 60px;
 }
 
 .header-nav {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
 }
 
-.header-nav>a {
-    font-size: medium;
-    font-weight: 500;
-    color: black;
-    text-decoration: none;
+.header-nav > a {
+  font-size: medium;
+  font-weight: 500;
+  color: black;
+  text-decoration: none;
 }
 
-.header-nav>a:hover {
-    text-decoration: solid underline;
-    text-underline-position: below;
-    text-underline-offset: 8px;
+.header-nav > a:hover {
+  text-decoration: solid underline;
+  text-underline-position: below;
+  text-underline-offset: 8px;
 }
