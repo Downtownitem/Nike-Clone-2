@@ -1,102 +1,226 @@
+@font-face {
+    font-family: 'Helvetica Now Text';
+    src: url('fonts/HelveticaNowText-Medium.woff2') format('woff2'),
+         url('fonts/HelveticaNowText-Medium.woff') format('woff');
+    font-weight: 500; 
+    font-style: normal;
+  }
+  
 .main-section {
-    padding: 0 60px;
+  padding: 0 41px;
 }
 
 .banner-image {
-    width: calc(100% - 120px);
-    height: calc(110vh - 140px);
-    background-size: cover;
-    background-position: center;
-    display: flex;
-    justify-content: start;
-    align-items: end;
-    padding: 70px 60px;
+  width: calc(100% - 120px);
+  height: calc(110vh - 140px);
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  justify-content: start;
+  align-items: end;
+  padding: 55px 60px;
 }
 
 .banner-image > div {
-    width: 50%;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    color: white;
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  color: white;
 }
 
 .small-text {
-    margin: 0;
-    font-size: 1.1rem;
+  margin: 0;
+  font-size: 1.1rem;
 }
 
 .big-text {
-    line-height: 1;
-    font-size: 3.5rem;
-    font-weight: 900;
-    margin: 0;
+  line-height: 1;
+  font-size: 4rem;
+  font-weight: 900;
+  margin: 0;
 }
 
 .buy-text {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    gap: 15px;
-    padding: 60px 0;
-    width: 800px;
-    margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 25px;
+  padding: 50px 0;
+  width: 950px;
+  margin: 0 auto;
 }
 
+h1, p {
+    margin: 0; 
+  }
+  
 .nike-button {
+  padding: 10px 15px;
+  font-size: 1rem;
+  font-weight: bold;
+  color: #fff;
+  background-color: #111111;
+  border: none;
+  border-radius: 20px;
+}
+
+.container-img {
+  display: grid;
+  grid-template-columns: repeat(2, 50%);
+  gap: 10px;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+  margin-top: 30px;
+}
+
+.card {
+  background-color: #fff;
+  overflow: hidden;
+  width: 100%;
+  text-align: center;
+  line-height: 1;
+}
+
+.card-image {
+  position: relative;
+  height: 45vw;
+  width: 100%;
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.card-image > div {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  background-color: transparent;
+  border-radius: 30px;
+  width: 140px;
+  height: 140px;
+}
+
+.card-image > div > span {
+  font-weight: bold;
+  font-size: 60px;
+}
+
+.display2 {
+    font: 500 2rem/1.5 'Helvetica Now Display Medium', Helvetica, Arial, sans-serif;
+    margin: 10px 0;
+    margin-top: 80px;
+  }
+.runclub{
+    margin: 100 auto;
+    text-align: left;
+    margin-top: -50px;
+}
+.runclub p{
+    margin-bottom: 20px;
+    font-size: 1rem;
+    line-height: 1.5;
+}
+.trainging{
+    margin: 100 auto;
+    text-align: left;
+    margin-top: -50px;
+}
+.trainging p{
+    margin-bottom: 20px;
+    font-size: 1rem;
+    line-height: 1.5;
+}
+.download-btn {
+    display: inline-block;
     padding: 10px 15px;
     font-size: 1rem;
     font-weight: bold;
     color: #fff;
-    background-color: #111111;
+    background-color: #111;
     border: none;
     border-radius: 20px;
+    text-decoration: none;
+    transition: background-color 0.2s;
+  }
+footer {
+  border-top: 1px solid #ddd;
+  padding: 78px 60px 78px 50px;   display: grid;
+  grid-template-columns: auto auto 1fr; 
+  color: #000;
+  font-family: "Helvetica Now Text Medium", Helvetica, Arial, sans-serif;
+  align-items: start;
 }
 
-.container-img {
-    display: grid;
-    grid-template-columns: repeat(2, 50%);
-    gap: 10px;
-    width: 100%;
-    justify-content: center;
-    align-items: center;
-    margin-top: 30px;
+footer h3 {
+  font-size: 0.95rem;
+  font-weight: bold;
+  margin-bottom: 40px;
+  text-transform: uppercase;
+  color: #111111;
 }
 
-.card {
-    background-color: #fff;
-    overflow: hidden;
-    width: 100%;
-    text-align: center;
-    line-height: 1;
+footer ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
 }
-
-.card-image {
-    position: relative;
-    height: 45vw;
-    width: 100%;
-    background-size: cover;
-    background-position: center;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+footer li {
+  margin-bottom: 14px;
 }
-
-.card-image > div {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    gap: 20px;
-    background-color: white;
-    border-radius: 30px;
-    width: 140px;
-    height: 140px;
+.country {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  justify-content: flex-end;
+  color: #707072;
 }
-
-.card-image > div > span {
+.country svg{
+    width: 16px;
+    height: 16px;
+    stroke-width: 1;
+}
+.country span{
+    font-size: 0.85rem;
     font-weight: bold;
-    font-size: 40px;
+}
+.bottom-footer{
+    margin-top: 50px;
+}
+.bottom-footer p {
+    white-space: nowrap;  
+    margin: 0;
+    color: #707072;   
+    font-weight: 700;   
+    font-size: 14px;     
+  }
+.bottom-footer p a {
+    margin-left: 20px;
+    text-decoration: none;
+    color: #707072;
+    font-weight: 700;
+    transition: color 0.3s, font-weight 0.3s;
+    margin-right: 7px;
+
+}
+.bottom-footer a:hover {
+    font-weight: 700; 
+    color: #000; 
+}
+footer a {
+  margin-right: 20px;
+  text-decoration: none;
+  color: #707072;
+  font-weight: bold;
+}
+
+footer a:hover {
+  text-decoration: none;
 }
 
