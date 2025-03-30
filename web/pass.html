@@ -1,0 +1,31 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Stripe payouts</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        padding: 40px;
+      }
+      button {
+        padding: 12px 20px;
+        background-color: #635bff;
+        color: white;
+        border: none;
+        cursor: pointer;
+        border-radius: 4px;
+      }
+      button:hover {
+        background-color: #534bf5;
+      }
+    </style>
+  </head>
+  <body>
+    <h2>Stripe Checkout (Vanilla JS)</h2>
+    <button id="checkout-button">Pagar $20.00</button>
+
+    <script src="https://js.stripe.com/v3/"></script>
+    <script src="js/stripe.js"></script>
+  </body>
+</html>
