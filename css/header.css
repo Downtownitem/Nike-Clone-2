@@ -10,11 +10,23 @@
   font-weight: normal;
   font-style: normal;
   font-display: swap;
+  
+}
+@font-face {
+  font-family: 'Helvetica Now Text';
+  src: url('fonts/HelveticaNowText-Medium.woff2') format('woff2'),
+       url('fonts/HelveticaNowText-Medium.woff') format('woff');
+  font-weight: 500; 
+  font-style: normal;
+  font-display: swap;
+}
+* {
+  font-family: 'Helvetica Now Text', Helvetica, Arial, sans-serif;
+}
+.display1 {
+  font: 800 6rem/1 'Nike Futura ND', 'Helvetica Now Text Medium', Helvetica, Arial, sans-serif;
 }
 
-* {
-  font-family: "Helvetica";
-}
 
 body {
   overflow-x: hidden;
@@ -24,11 +36,11 @@ body {
   height: 36px;
   background-color: #f5f5f5;
   display: flex;
-  justify-content: right;
+  justify-content: flex-end;
   align-items: center;
-  padding: 0 60px;
+  padding: 0 61px;
   gap: 10px;
-  font-size: smaller;
+  font-size: 12px;
 }
 
 .mini-header > div {
@@ -40,6 +52,8 @@ body {
 .mini-header > a {
   color: rgb(0, 0, 0);
   text-decoration: none;
+  font-weight: 700; 
+  
 }
 
 .mini-header > a:hover {
@@ -55,10 +69,12 @@ header {
 }
 
 header > img {
-  height: 60px;
-  width: 60px;
+  width: 72px;
+  height: auto;
   position: absolute;
-  left: 60px;
+  left: 39px; 
+  top: 50%;  
+  transform: translateY(-50%);
 }
 
 .header-nav {
@@ -70,13 +86,14 @@ header > img {
 
 .header-nav > a {
   font-size: medium;
-  font-weight: 500;
   color: black;
   text-decoration: none;
+  font-weight: 550;
 }
 
 .header-nav > a:hover {
   text-decoration: solid underline;
   text-underline-position: below;
-  text-underline-offset: 8px;
+  text-underline-offset: 10px;
+  text-decoration-thickness: 2px;
 }
