@@ -672,9 +672,10 @@
           const productElement = document.createElement("div");
           productElement.className = "product-card";
           productElement.innerHTML = `
-        <img src="${product.url_imagen}" alt="${
-            product.nombre
-          }" class="product-image">
+        <div 
+          class="product-image" 
+          style="background-image: url('${product.url_imagen}'); background-size: cover; background-position: center;">
+        </div>
         <div class="product-info">
         <div class="product-title">${product.nombre}</div>
         <div class="product-category">${product.descripcion}</div>

@@ -4,18 +4,23 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Nike Product Details</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
     <style>
       * {
         margin: 0;
         padding: 0;
         box-sizing: border-box;
-        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
-          Helvetica, Arial, sans-serif;
+        font-family: "Montserrat", -apple-system, BlinkMacSystemFont, "Segoe UI",
+          Roboto, Helvetica, Arial, sans-serif;
       }
 
       body {
         font-size: 16px;
         color: #111;
+        background-color: #fafafa;
       }
 
       /* Product page styles */
@@ -24,12 +29,19 @@
         padding: 16px 36px;
         color: #757575;
         font-size: 14px;
+        max-width: 1200px;
+        margin: 0 auto;
       }
 
       .breadcrumb a {
         color: #757575;
         text-decoration: none;
         margin: 0 8px;
+        transition: color 0.2s ease;
+      }
+
+      .breadcrumb a:hover {
+        color: #000;
       }
 
       .breadcrumb a:first-child {
@@ -42,48 +54,37 @@
 
       .product-container {
         display: flex;
+        flex-wrap: wrap;
         max-width: 1200px;
         margin: 0 auto;
-        padding: 0 36px;
+        padding: 0 36px 60px;
+        background-color: white;
+        border-radius: 12px;
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.05);
       }
 
       .product-gallery {
-        display: flex;
-        width: 60%;
-      }
-
-      .thumbnails {
-        display: flex;
-        flex-direction: column;
-        width: 80px;
-        margin-right: 16px;
-      }
-
-      .thumbnail {
-        width: 70px;
-        height: 70px;
-        border-radius: 4px;
-        cursor: pointer;
-        margin-bottom: 12px;
-        border: 1px solid #e5e5e5;
-        overflow: hidden;
-      }
-
-      .thumbnail img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
+        width: 55%;
+        padding: 24px 0;
       }
 
       .main-image {
-        flex-grow: 1;
         position: relative;
+        width: 100%;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
       }
 
       .main-image img {
         width: 100%;
         height: auto;
         display: block;
+        transition: transform 0.5s ease;
+      }
+
+      .main-image img:hover {
+        transform: scale(1.03);
       }
 
       .nav-arrows {
@@ -93,46 +94,56 @@
         width: 100%;
         top: 50%;
         transform: translateY(-50%);
+        padding: 0 16px;
       }
 
       .arrow {
-        width: 36px;
-        height: 36px;
+        width: 40px;
+        height: 40px;
         border-radius: 50%;
         background-color: white;
         display: flex;
         align-items: center;
         justify-content: center;
         cursor: pointer;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+      }
+
+      .arrow:hover {
+        transform: scale(1.1);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
       }
 
       .product-info {
-        width: 40%;
-        padding-left: 40px;
+        width: 45%;
+        padding: 24px 0 0 40px;
       }
 
       .product-title {
-        font-size: 28px;
-        font-weight: 500;
+        font-size: 32px;
+        font-weight: 600;
         margin-bottom: 8px;
+        letter-spacing: -0.5px;
       }
 
       .product-subtitle {
         font-size: 16px;
         color: #757575;
-        margin-bottom: 16px;
+        margin-bottom: 20px;
+        font-weight: 500;
       }
 
       .product-price {
-        font-size: 16px;
+        font-size: 24px;
+        font-weight: 600;
         margin-bottom: 24px;
       }
 
       .rating {
         display: flex;
         align-items: center;
-        margin-bottom: 16px;
+        margin-bottom: 24px;
       }
 
       .stars {
@@ -142,48 +153,120 @@
 
       .star {
         color: #f6c415;
-        font-size: 16px;
+        font-size: 20px;
       }
 
       .reviews-count {
         color: #757575;
         font-size: 14px;
+        font-weight: 500;
       }
 
       .size-selector {
-        margin-bottom: 24px;
+        margin-bottom: 32px;
       }
 
       .size-selector-header {
         display: flex;
         justify-content: space-between;
-        margin-bottom: 12px;
+        margin-bottom: 16px;
         font-size: 16px;
+        font-weight: 500;
       }
 
       .size-guide {
         color: #757575;
         text-decoration: none;
+        transition: color 0.2s ease;
+      }
+
+      .size-guide:hover {
+        color: #000;
+        text-decoration: underline;
       }
 
       .size-options {
         display: flex;
-        gap: 8px;
+        gap: 12px;
+        flex-wrap: wrap;
       }
 
       .size-option {
-        width: 60px;
-        height: 40px;
+        width: 64px;
+        height: 44px;
         border: 1px solid #e5e5e5;
-        border-radius: 4px;
+        border-radius: 8px;
         display: flex;
         align-items: center;
         justify-content: center;
         cursor: pointer;
+        transition: all 0.2s ease;
+        font-weight: 500;
+      }
+
+      .size-option:hover {
+        border-color: #111;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
       }
 
       .size-option.selected {
         border-color: #111;
+        background-color: #111;
+        color: white;
+      }
+
+      .quantity-selector {
+        margin-bottom: 24px;
+      }
+
+      .quantity-selector-header {
+        margin-bottom: 16px;
+        font-size: 16px;
+        font-weight: 500;
+      }
+
+      .quantity-control {
+        display: flex;
+        align-items: center;
+        max-width: 160px;
+      }
+
+      .quantity-btn {
+        width: 36px;
+        height: 36px;
+        border: 1px solid #e5e5e5;
+        background-color: #f5f5f5;
+        font-size: 18px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        user-select: none;
+        transition: all 0.2s ease;
+      }
+
+      .quantity-btn:hover {
+        background-color: #e5e5e5;
+      }
+
+      .quantity-btn.minus {
+        border-radius: 8px 0 0 8px;
+      }
+
+      .quantity-btn.plus {
+        border-radius: 0 8px 8px 0;
+      }
+
+      .quantity-input {
+        width: 60px;
+        height: 36px;
+        border: 1px solid #e5e5e5;
+        border-left: none;
+        border-right: none;
+        text-align: center;
+        font-size: 16px;
+        font-weight: 500;
       }
 
       .add-to-cart {
@@ -192,11 +275,19 @@
         background-color: black;
         color: white;
         border: none;
-        border-radius: 30px;
+        border-radius: 12px;
         font-size: 16px;
-        font-weight: 500;
+        font-weight: 600;
         cursor: pointer;
-        margin-bottom: 24px;
+        margin-bottom: 32px;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .add-to-cart:not(.disabled):hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
       }
 
       .add-to-cart.disabled {
@@ -204,30 +295,105 @@
         cursor: not-allowed;
       }
 
+      .add-to-cart::after {
+        content: "";
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 300%;
+        height: 300%;
+        background: rgba(255, 255, 255, 0.2);
+        border-radius: 50%;
+        transform: translate(-50%, -50%) scale(0);
+        opacity: 0;
+        transition: transform 0.5s ease-out, opacity 0.5s ease-out;
+      }
+
+      .add-to-cart.adding::after {
+        transform: translate(-50%, -50%) scale(1);
+        opacity: 1;
+      }
+
+      .add-to-cart .button-text {
+        position: relative;
+        z-index: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+      }
+
+      .add-to-cart .checkmark {
+        display: inline-block;
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        background-color: white;
+        position: relative;
+        margin-right: 8px;
+        transform: scale(0);
+        opacity: 0;
+        transition: all 0.3s ease;
+      }
+
+      .add-to-cart.added .checkmark {
+        transform: scale(1);
+        opacity: 1;
+      }
+
+      .add-to-cart .checkmark::after {
+        content: "";
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 10px;
+        height: 5px;
+        border-left: 2px solid black;
+        border-bottom: 2px solid black;
+        transform: translate(-50%, -70%) rotate(-45deg);
+      }
+
       .shipping-info {
-        margin-bottom: 24px;
+        margin-bottom: 32px;
+        padding: 20px;
+        border-radius: 8px;
+        background-color: #f9f9f9;
       }
 
       .shipping-title {
         font-size: 16px;
-        margin-bottom: 8px;
+        font-weight: 600;
+        margin-bottom: 12px;
       }
 
       .shipping-text {
         font-size: 14px;
         color: #757575;
+        margin-bottom: 8px;
       }
 
       .edit-location {
-        color: #757575;
+        color: #111;
         text-decoration: none;
         font-size: 14px;
+        font-weight: 500;
+        display: inline-flex;
+        align-items: center;
+      }
+
+      .edit-location:hover {
+        text-decoration: underline;
+      }
+
+      .edit-location svg {
+        margin-right: 6px;
       }
 
       .product-description {
         font-size: 16px;
-        line-height: 1.5;
+        line-height: 1.6;
         margin-bottom: 24px;
+        color: #444;
       }
 
       .loading {
@@ -256,11 +422,43 @@
         }
       }
 
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(10px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
       .error-message {
         padding: 24px;
-        color: red;
+        color: #e53935;
         text-align: center;
         width: 100%;
+        background-color: #ffebee;
+        border-radius: 8px;
+        animation: fadeIn 0.3s ease-out;
+      }
+
+      /* Responsive styles */
+      @media (max-width: 768px) {
+        .product-container {
+          flex-direction: column;
+          padding: 0 20px 40px;
+        }
+
+        .product-gallery,
+        .product-info {
+          width: 100%;
+          padding-left: 0;
+        }
+
+        .breadcrumb {
+          padding: 16px 20px;
+        }
       }
     </style>
   </head>
@@ -318,31 +516,11 @@
           const productHTML = `
                     <!-- Product Gallery -->
                     <div class="product-gallery">
-                        <!-- Thumbnails -->
-                        <div class="thumbnails">
-                            <div class="thumbnail">
-                                <img src="${
-                                  productData.url_imagen ||
-                                  "/api/placeholder/70/70"
-                                }" alt="${productData.nombre}">
-                            </div>
-                            <div class="thumbnail">
-                                <img src="/api/placeholder/70/70" alt="${
-                                  productData.nombre
-                                } vista alternativa">
-                            </div>
-                            <div class="thumbnail">
-                                <img src="/api/placeholder/70/70" alt="${
-                                  productData.nombre
-                                } vista alternativa">
-                            </div>
-                        </div>
-                        
                         <!-- Main Image -->
                         <div class="main-image">
                             <img src="${
                               productData.url_imagen ||
-                              "/api/placeholder/500/600"
+                              "/api/placeholder/600/700"
                             }" alt="${productData.nombre}">
                             <div class="nav-arrows">
                                 <div class="arrow prev">
@@ -390,23 +568,44 @@
                                 <div class="size-option">XL</div>
                             </div>
                         </div>
+
+                        <!-- Quantity Selector -->
+                        <div class="quantity-selector">
+                            <div class="quantity-selector-header">
+                                <span>Cantidad</span>
+                            </div>
+                            <div class="quantity-control">
+                                <div class="quantity-btn minus">-</div>
+                                <input type="text" class="quantity-input" value="1" readonly>
+                                <div class="quantity-btn plus">+</div>
+                            </div>
+                        </div>
                         
                         <!-- Add to Cart Button -->
                         <button class="add-to-cart ${
                           !productData.disponibilidad ? "disabled" : ""
                         }">
-                            ${
-                              productData.disponibilidad
-                                ? "Agregar a la bolsa de compras"
-                                : "Agotado"
-                            }
+                            <span class="button-text">
+                                ${
+                                  productData.disponibilidad
+                                    ? "Agregar a la bolsa de compras"
+                                    : "Agotado"
+                                }
+                            </span>
                         </button>
                         
                         <!-- Shipping Info -->
                         <div class="shipping-info">
-                            <h3 class="shipping-title">Envío*</h3>
-                            <p class="shipping-text">Para obtener información de envío precisa</p>
-                            <a href="#" class="edit-location">Editar ubicación</a>
+                            <h3 class="shipping-title">Envío y Devoluciones</h3>
+                            <p class="shipping-text">Envío estándar gratuito para miembros de Nike.</p>
+                            <p class="shipping-text">Devoluciones gratuitas dentro de los 30 días siguientes a la fecha de entrega.</p>
+                            <a href="#" class="edit-location">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M12 22s-8-4.5-8-11.8A8 8 0 0 1 12 2a8 8 0 0 1 8 8.2c0 7.3-8 11.8-8 11.8z"/>
+                                    <circle cx="12" cy="10" r="3"/>
+                                </svg>
+                                Editar ubicación
+                            </a>
                         </div>
                         
                         <!-- Product Description -->
@@ -418,39 +617,82 @@
 
           document.getElementById("product-container").innerHTML = productHTML;
 
-          // Add event listeners
+          // Quantity selector functionality
+          const quantityInput = document.querySelector(".quantity-input");
+          const minusBtn = document.querySelector(".quantity-btn.minus");
+          const plusBtn = document.querySelector(".quantity-btn.plus");
+
+          minusBtn.addEventListener("click", function () {
+            let currentValue = parseInt(quantityInput.value);
+            if (currentValue > 1) {
+              quantityInput.value = currentValue - 1;
+            }
+          });
+
+          plusBtn.addEventListener("click", function () {
+            let currentValue = parseInt(quantityInput.value);
+            quantityInput.value = currentValue + 1;
+          });
+
+          // Add to cart functionality
           const addToCartButton = document.querySelector(".add-to-cart");
           if (
             addToCartButton &&
             !addToCartButton.classList.contains("disabled")
           ) {
             addToCartButton.addEventListener("click", function () {
+              // Get current quantity
+              const quantity = parseInt(
+                document.querySelector(".quantity-input").value
+              );
+
+              // Initialize cart if it doesn't exist
               if (!localStorage.getItem("user_cart")) {
                 localStorage.setItem("user_cart", JSON.stringify({}));
               }
 
               const userCart = JSON.parse(localStorage.getItem("user_cart"));
 
+              // Update cart with new format
               if (userCart[productId]) {
-                userCart[productId].quantity += 1;
+                userCart[productId].quantity += quantity;
               } else {
                 userCart[productId] = {
-                  name: productData.nombre,
-                  price: productData.precio,
-                  quantity: 1,
-                  image: productData.url_imagen || "/api/placeholder/70/70",
+                  quantity: quantity,
                 };
               }
 
               localStorage.setItem("user_cart", JSON.stringify(userCart));
 
-              // Change button text and style
-              addToCartButton.textContent = "✔ Agregado al carrito";
-              addToCartButton.style.backgroundColor = "green";
-              addToCartButton.style.color = "white";
+              // Animation for adding to cart
+              addToCartButton.classList.add("adding");
+
+              setTimeout(() => {
+                addToCartButton.classList.remove("adding");
+                addToCartButton.classList.add("added");
+
+                // Update button text with checkmark
+                addToCartButton.innerHTML = `
+                  <span class="button-text">
+                    <span class="checkmark"></span>
+                    Agregado al carrito
+                  </span>
+                `;
+
+                // Optional: Reset after some time
+                setTimeout(() => {
+                  addToCartButton.classList.remove("added");
+                  addToCartButton.innerHTML = `
+                    <span class="button-text">
+                      Agregar a la bolsa de compras
+                    </span>
+                  `;
+                }, 3000);
+              }, 300);
             });
           }
 
+          // Size selector functionality
           const sizeOptions = document.querySelectorAll(".size-option");
           sizeOptions.forEach((option) => {
             option.addEventListener("click", function () {
@@ -462,35 +704,6 @@
           showError(`Error al cargar los datos del producto: ${error.message}`);
           console.error("Error fetching product data:", error);
         }
-
-        document
-          .querySelector(".sort-dropdown")
-          .addEventListener("change", (event) => {
-            const value = event.target.value;
-            let sortedProducts = [...productsData];
-
-            switch (value) {
-              case "Precio: menor a mayor":
-                sortedProducts.sort((a, b) => a.precio - b.precio);
-                break;
-              case "Precio: mayor a menor":
-                sortedProducts.sort((a, b) => b.precio - a.precio);
-                break;
-              case "Novedades":
-                // Suponiendo que tienes un campo como 'fecha' o 'novedad', puedes usar:
-                // sortedProducts.sort((a, b) => new Date(b.fecha) - new Date(a.fecha));
-                // Por ahora, simplemente no ordenaremos o simularemos
-                break;
-              case "Destacados":
-                // Aquí puedes personalizar según tus datos reales
-                // Por ejemplo, podrías tener un campo booleano `destacado` o algún ranking
-                break;
-              default:
-                return;
-            }
-
-            loadProducts(sortedProducts);
-          });
       });
 
       // Helper function to generate star rating HTML

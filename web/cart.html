@@ -384,16 +384,16 @@
     <script>
       document.addEventListener("DOMContentLoaded", async function () {
         // Simulate localStorage with cart data if none exists
-        if (!localStorage.getItem("cart")) {
+        if (!localStorage.getItem("user_cart")) {
           // If no cart exists in localStorage, create a sample one
           const sampleCart = {
             1: { quantity: 1 },
           };
-          localStorage.setItem("cart", JSON.stringify(sampleCart));
+          localStorage.setItem("user_cart", JSON.stringify(sampleCart));
         }
 
         // Get cart data from localStorage
-        const cart = JSON.parse(localStorage.getItem("cart"));
+        const cart = JSON.parse(localStorage.getItem("user_cart"));
         const cartItemsContainer = document.getElementById(
           "cart-items-container"
         );
@@ -516,7 +516,7 @@
               cart[productId].quantity = currentQuantity + 1;
             }
 
-            localStorage.setItem("cart", JSON.stringify(cart));
+            localStorage.setItem("user_cart", JSON.stringify(cart));
             await loadCartItems();
           } else if (
             target.classList.contains("delete-btn") ||
@@ -528,7 +528,7 @@
             const productId = deleteBtn.dataset.id;
 
             delete cart[productId];
-            localStorage.setItem("cart", JSON.stringify(cart));
+            localStorage.setItem("user_cart", JSON.stringify(cart));
             await loadCartItems();
           }
         });

@@ -14,27 +14,83 @@ app.use(express.json());
 const productos = require("./productos_zapatos.json");
 
 app.post("/create-checkout-session", async (req, res) => {
-  const session = await stripe.checkout.sessions.create({
-    payment_method_types: ["card"],
-    line_items: [
-      {
+  const { usuario_id, productos } = req.body;
+
+  if (!usuario_id || !productos || typeof productos !== "object") {
+    return res.status(400).json({ error: "Datos inválidos" });
+  }
+
+  try {
+    const productIds = Object.keys(productos).map((id) => parseInt(id));
+    const query = `
+      SELECT id, nombre, descripcion, precio
+      FROM productos
+      WHERE id = ANY($1)
+    `;
+    const result = await pool.query(query, [productIds]);
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({ error: "No se encontraron productos" });
+    }
+
+    const line_items = result.rows.map((producto) => {
+      const quantity = productos[producto.id]?.quantity || 1;
+      return {
         price_data: {
           currency: "usd",
           product_data: {
-            name: "Producto de ejemplo",
+            name: producto.nombre,
+            description: producto.descripcion,
           },
-          unit_amount: 2000,
+          unit_amount: Math.round(parseFloat(producto.precio) * 100), // Stripe usa centavos
         },
-        quantity: 1,
-      },
-    ],
-    mode: "payment",
-    success_url: "http://localhost:8000/success.html?product_id=123456789",
-    cancel_url:
-      "http://localhost:8000/failed.html?product_id=123456789&error_code=processing_error",
-  });
+        quantity,
+      };
+    });
 
-  res.json({ id: session.id });
+    const session = await stripe.checkout.sessions.create({
+      payment_method_types: ["card"],
+      line_items,
+      mode: "payment",
+      metadata: {
+        usuario_id: String(usuario_id),
+      },
+      success_url: `http://localhost:8000/success.html?session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `http://localhost:8000/failed.html?session_id={CHECKOUT_SESSION_ID}`,
+    });
+
+    res.json({ id: session.id });
+  } catch (error) {
+    console.error("Error al crear sesión de pago:", error);
+    res.status(500).json({ error: "Error al crear sesión de pago" });
+  }
+});
+
+app.post("/registrar_usuario", async (req, res) => {
+  const { nombre, apellido, email, document_type, document, phone_number } =
+    req.body;
+
+  if (!nombre || !email) {
+    return res.status(400).json({ error: "Nombre y email son obligatorios" });
+  }
+
+  try {
+    const result = await pool.query(
+      `
+      INSERT INTO usuarios (nombre, apellido, email, document_type, document, phone_number)
+      VALUES ($1, $2, $3, $4, $5, $6)
+      RETURNING id
+      `,
+      [nombre, apellido, email, document_type, document, phone_number]
+    );
+
+    res.json({ id: result.rows[0].id });
+  } catch (error) {
+    console.error("Error al insertar usuario:", error);
+
+    // Evita exponer errores de base de datos al cliente en producción
+    res.status(500).json({ error: "Error al insertar usuario" });
+  }
 });
 
 app.get("/productos", async (req, res) => {
