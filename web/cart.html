@@ -1,0 +1,544 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Resumen de compra</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Montserrat", sans-serif;
+      }
+
+      .content {
+        padding: 20px;
+        max-width: 1200px;
+        margin: 0 auto;
+        background-color: #ffffff;
+        color: #333333;
+      }
+
+      .back-button {
+        display: flex;
+        align-items: center;
+        margin-bottom: 40px;
+        font-weight: 500;
+        font-size: 16px;
+        cursor: pointer;
+        color: #333;
+      }
+
+      .back-button svg {
+        margin-right: 10px;
+      }
+
+      h1 {
+        text-align: center;
+        margin-bottom: 30px;
+        font-size: 32px;
+        color: #333;
+        font-weight: 500;
+      }
+
+      .cart-summary {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 30px;
+      }
+
+      @media (min-width: 768px) {
+        .cart-summary {
+          grid-template-columns: 3fr 2fr;
+        }
+      }
+
+      .cart-header {
+        display: grid;
+        grid-template-columns: 2fr 1fr 1fr 1fr;
+        padding: 15px 0;
+        border-bottom: 1px solid #e0e0e0;
+        font-weight: 500;
+        color: #333;
+      }
+
+      .cart-item {
+        display: grid;
+        grid-template-columns: 2fr 1fr 1fr 1fr;
+        padding: 25px 0;
+        border-bottom: 1px solid #f0f0f0;
+        align-items: center;
+      }
+
+      .product-info {
+        display: flex;
+        align-items: center;
+      }
+
+      .product-image {
+        width: 100px;
+        height: 100px;
+        margin-right: 20px;
+        background-color: #f9f9f9;
+        border-radius: 4px;
+        object-fit: cover;
+      }
+
+      .product-details h3 {
+        font-size: 15px;
+        font-weight: 600;
+        margin-bottom: 6px;
+        color: #333;
+      }
+
+      .product-details p {
+        font-size: 14px;
+        color: #666;
+        font-weight: 400;
+      }
+
+      .product-price {
+        font-weight: 600;
+        font-size: 16px;
+      }
+
+      .quantity-selector {
+        display: flex;
+        align-items: center;
+      }
+
+      .quantity-btn {
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        background-color: #f0f0f0;
+        border: none;
+        font-size: 18px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #333;
+      }
+
+      .quantity-display {
+        width: 30px;
+        text-align: center;
+        font-size: 16px;
+        font-weight: 500;
+      }
+
+      .delete-btn {
+        background: none;
+        border: none;
+        cursor: pointer;
+        margin-left: 15px;
+      }
+
+      .order-summary {
+        background-color: #fff;
+        padding: 30px;
+        border-radius: 8px;
+      }
+
+      .promo-code {
+        margin-bottom: 30px;
+        padding: 15px 0;
+        border-bottom: 1px solid #f0f0f0;
+      }
+
+      .promo-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        cursor: pointer;
+        font-weight: 500;
+      }
+
+      .delivery-section {
+        margin-bottom: 30px;
+      }
+
+      .delivery-section h2 {
+        margin-bottom: 15px;
+        font-size: 22px;
+        font-weight: 600;
+        color: #333;
+      }
+
+      .delivery-section p {
+        color: #666;
+        margin-bottom: 20px;
+        font-size: 14px;
+        line-height: 1.6;
+      }
+
+      .calculate-btn {
+        padding: 10px 20px;
+        border: 1px solid #ddd;
+        border-radius: 25px;
+        background-color: #fff;
+        color: #333;
+        cursor: pointer;
+        font-size: 15px;
+        font-weight: 500;
+        margin-bottom: 25px;
+        transition: all 0.2s ease;
+      }
+
+      .calculate-btn:hover {
+        background-color: #f9f9f9;
+      }
+
+      .summary-line {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 12px;
+        font-size: 16px;
+        font-weight: 500;
+      }
+
+      .total-line {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 25px;
+        font-size: 16px;
+        font-weight: 600;
+      }
+
+      .free-shipping {
+        margin: 25px 0;
+        font-weight: 500;
+        color: #333;
+      }
+
+      .progress-bar {
+        height: 6px;
+        background-color: #4caf50;
+        border-radius: 3px;
+        margin-bottom: 25px;
+        width: 100%;
+      }
+
+      .checkout-btn {
+        display: block;
+        width: 100%;
+        padding: 16px;
+        background-color: #000;
+        color: #fff;
+        border: none;
+        border-radius: 30px;
+        font-size: 16px;
+        font-weight: 500;
+        cursor: pointer;
+        margin-bottom: 25px;
+        transition: all 0.2s ease;
+      }
+
+      .checkout-btn:hover {
+        background-color: #222;
+      }
+
+      .continue-shopping {
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        font-size: 16px;
+        font-weight: 500;
+        cursor: pointer;
+        color: #333;
+      }
+
+      .continue-shopping svg {
+        margin-right: 10px;
+      }
+
+      .item-actions {
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+      }
+
+      .empty-cart-message {
+        text-align: center;
+        padding: 50px 0;
+        font-size: 18px;
+        color: #666;
+        font-weight: 500;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="header"></div>
+
+    <div class="content">
+      <div class="back-button">
+        <svg
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M15 18L9 12L15 6"
+            stroke="black"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        </svg>
+        Volver
+      </div>
+
+      <h1>Resumen de compra</h1>
+
+      <div class="cart-summary">
+        <div class="cart-items">
+          <div class="cart-header">
+            <div>Producto</div>
+            <div>Precio</div>
+            <div>Cantidad</div>
+            <div>Subtotal</div>
+          </div>
+          <div id="cart-items-container">
+            <!-- Cart items will be loaded here by JavaScript -->
+          </div>
+        </div>
+
+        <div class="order-summary">
+          <div class="promo-code">
+            <div class="promo-header">
+              <span>¿Tienes un código promocional?</span>
+              <svg
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M6 9L12 15L18 9"
+                  stroke="black"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            </div>
+          </div>
+
+          <div class="delivery-section">
+            <h2>Entrega</h2>
+            <p>
+              Vea todas las opciones de envío para sus productos, incluyendo los
+              plazos y los precios de envío
+            </p>
+            <button class="calculate-btn">Calcular</button>
+          </div>
+
+          <div class="summary-line">
+            <span>Subtotal</span>
+            <span id="subtotal-value">$0.00</span>
+          </div>
+
+          <div class="total-line">
+            <span>Total</span>
+            <span id="total-value">$0.00</span>
+          </div>
+
+          <div class="free-shipping">Tienes envío Gratis en esta compra</div>
+
+          <div class="progress-bar"></div>
+
+          <button class="checkout-btn">Ir al checkout</button>
+
+          <div class="continue-shopping">
+            <svg
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M15 18L9 12L15 6"
+                stroke="black"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+            Seguir comprando
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", async function () {
+        // Simulate localStorage with cart data if none exists
+        if (!localStorage.getItem("cart")) {
+          // If no cart exists in localStorage, create a sample one
+          const sampleCart = {
+            1: { quantity: 1 },
+          };
+          localStorage.setItem("cart", JSON.stringify(sampleCart));
+        }
+
+        // Get cart data from localStorage
+        const cart = JSON.parse(localStorage.getItem("cart"));
+        const cartItemsContainer = document.getElementById(
+          "cart-items-container"
+        );
+        const subtotalElement = document.getElementById("subtotal-value");
+        const totalElement = document.getElementById("total-value");
+
+        let subtotal = 0;
+
+        // Function to format price with dot as thousands separator and CLP style
+        function formatPrice(price) {
+          return `$ ${Math.round(price).toLocaleString("es-CL")}`;
+        }
+
+        // Check if cart is empty
+        function isCartEmpty() {
+          return Object.keys(cart).length === 0;
+        }
+
+        // Function to update cart UI
+        async function loadCartItems() {
+          cartItemsContainer.innerHTML = "";
+          subtotal = 0;
+
+          if (isCartEmpty()) {
+            // Display empty cart message
+            const emptyCartMessage = document.createElement("div");
+            emptyCartMessage.className = "empty-cart-message";
+            emptyCartMessage.textContent =
+              "No tienes ningún producto en tu carrito";
+            cartItemsContainer.appendChild(emptyCartMessage);
+
+            // Update subtotal and total to zero
+            subtotalElement.textContent = formatPrice(0);
+            totalElement.textContent = formatPrice(0);
+            return;
+          }
+
+          for (const productId in cart) {
+            try {
+              // Fetch product details from API
+              const response = await fetch(
+                `http://localhost:8001/producto/${productId}`
+              );
+              if (!response.ok) throw new Error("Error fetching product data");
+
+              const product = await response.json();
+              const quantity = cart[productId].quantity;
+              const itemTotal = product.precio * quantity;
+              subtotal += itemTotal;
+
+              // Create cart item element
+              const cartItemElement = document.createElement("div");
+              cartItemElement.className = "cart-item";
+              cartItemElement.innerHTML = `
+                            <div class="product-info">
+                                <img src="${product.url_imagen}" alt="${
+                product.nombre
+              }" class="product-image">
+                                <div class="product-details">
+                                    <h3>${product.nombre}</h3>
+                                    <p>HV0823-003 Talla:10 ${
+                                      product.descripcion
+                                    }</p>
+                                </div>
+                            </div>
+                            <div class="product-price">${formatPrice(
+                              product.precio
+                            )}</div>
+                            <div class="quantity-selector">
+                                <button class="quantity-btn decrease" data-id="${
+                                  product.id
+                                }">−</button>
+                                <span class="quantity-display">${quantity}</span>
+                                <button class="quantity-btn increase" data-id="${
+                                  product.id
+                                }">+</button>
+                            </div>
+                            <div class="item-actions">
+                                <div class="product-price">${formatPrice(
+                                  itemTotal
+                                )}</div>
+                                <button class="delete-btn" data-id="${
+                                  product.id
+                                }">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M18 6L6 18M6 6L18 18" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    </svg>
+                                </button>
+                            </div>
+                        `;
+
+              cartItemsContainer.appendChild(cartItemElement);
+            } catch (error) {
+              console.error("Error loading product:", error);
+            }
+          }
+
+          // Update subtotal and total
+          subtotalElement.textContent = formatPrice(subtotal);
+          totalElement.textContent = formatPrice(subtotal);
+        }
+
+        // Load initial cart items
+        await loadCartItems();
+
+        // Handle quantity changes
+        cartItemsContainer.addEventListener("click", async function (event) {
+          const target = event.target;
+
+          if (
+            target.classList.contains("decrease") ||
+            target.classList.contains("increase")
+          ) {
+            const productId = target.dataset.id;
+            const currentQuantity = cart[productId]?.quantity || 0;
+
+            if (target.classList.contains("decrease") && currentQuantity > 1) {
+              cart[productId].quantity = currentQuantity - 1;
+            } else if (target.classList.contains("increase")) {
+              cart[productId].quantity = currentQuantity + 1;
+            }
+
+            localStorage.setItem("cart", JSON.stringify(cart));
+            await loadCartItems();
+          } else if (
+            target.classList.contains("delete-btn") ||
+            target.closest(".delete-btn")
+          ) {
+            const deleteBtn = target.classList.contains("delete-btn")
+              ? target
+              : target.closest(".delete-btn");
+            const productId = deleteBtn.dataset.id;
+
+            delete cart[productId];
+            localStorage.setItem("cart", JSON.stringify(cart));
+            await loadCartItems();
+          }
+        });
+      });
+
+    // Add event listener to back-button
+    document.querySelector(".back-button").addEventListener("click", function () {
+      window.location.href = "shop.html";
+    });
+    </script>
+    <script src="js/include_header.js"></script>
+  </body>
+</html>

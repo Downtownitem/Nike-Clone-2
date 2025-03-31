@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Nike Product Details</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+          Helvetica, Arial, sans-serif;
+      }
+
+      body {
+        font-size: 16px;
+        color: #111;
+      }
+
+      /* Product page styles */
+      .breadcrumb {
+        display: flex;
+        padding: 16px 36px;
+        color: #757575;
+        font-size: 14px;
+      }
+
+      .breadcrumb a {
+        color: #757575;
+        text-decoration: none;
+        margin: 0 8px;
+      }
+
+      .breadcrumb a:first-child {
+        margin-left: 0;
+      }
+
+      .breadcrumb span {
+        margin: 0 8px;
+      }
+
+      .product-container {
+        display: flex;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 36px;
+      }
+
+      .product-gallery {
+        display: flex;
+        width: 60%;
+      }
+
+      .thumbnails {
+        display: flex;
+        flex-direction: column;
+        width: 80px;
+        margin-right: 16px;
+      }
+
+      .thumbnail {
+        width: 70px;
+        height: 70px;
+        border-radius: 4px;
+        cursor: pointer;
+        margin-bottom: 12px;
+        border: 1px solid #e5e5e5;
+        overflow: hidden;
+      }
+
+      .thumbnail img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+      .main-image {
+        flex-grow: 1;
+        position: relative;
+      }
+
+      .main-image img {
+        width: 100%;
+        height: auto;
+        display: block;
+      }
+
+      .nav-arrows {
+        position: absolute;
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+        top: 50%;
+        transform: translateY(-50%);
+      }
+
+      .arrow {
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        background-color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+
+      .product-info {
+        width: 40%;
+        padding-left: 40px;
+      }
+
+      .product-title {
+        font-size: 28px;
+        font-weight: 500;
+        margin-bottom: 8px;
+      }
+
+      .product-subtitle {
+        font-size: 16px;
+        color: #757575;
+        margin-bottom: 16px;
+      }
+
+      .product-price {
+        font-size: 16px;
+        margin-bottom: 24px;
+      }
+
+      .rating {
+        display: flex;
+        align-items: center;
+        margin-bottom: 16px;
+      }
+
+      .stars {
+        display: flex;
+        margin-right: 8px;
+      }
+
+      .star {
+        color: #f6c415;
+        font-size: 16px;
+      }
+
+      .reviews-count {
+        color: #757575;
+        font-size: 14px;
+      }
+
+      .size-selector {
+        margin-bottom: 24px;
+      }
+
+      .size-selector-header {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 12px;
+        font-size: 16px;
+      }
+
+      .size-guide {
+        color: #757575;
+        text-decoration: none;
+      }
+
+      .size-options {
+        display: flex;
+        gap: 8px;
+      }
+
+      .size-option {
+        width: 60px;
+        height: 40px;
+        border: 1px solid #e5e5e5;
+        border-radius: 4px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+      }
+
+      .size-option.selected {
+        border-color: #111;
+      }
+
+      .add-to-cart {
+        width: 100%;
+        padding: 18px;
+        background-color: black;
+        color: white;
+        border: none;
+        border-radius: 30px;
+        font-size: 16px;
+        font-weight: 500;
+        cursor: pointer;
+        margin-bottom: 24px;
+      }
+
+      .add-to-cart.disabled {
+        background-color: #cccccc;
+        cursor: not-allowed;
+      }
+
+      .shipping-info {
+        margin-bottom: 24px;
+      }
+
+      .shipping-title {
+        font-size: 16px;
+        margin-bottom: 8px;
+      }
+
+      .shipping-text {
+        font-size: 14px;
+        color: #757575;
+      }
+
+      .edit-location {
+        color: #757575;
+        text-decoration: none;
+        font-size: 14px;
+      }
+
+      .product-description {
+        font-size: 16px;
+        line-height: 1.5;
+        margin-bottom: 24px;
+      }
+
+      .loading {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 400px;
+        width: 100%;
+      }
+
+      .loading-spinner {
+        border: 4px solid #f3f3f3;
+        border-top: 4px solid #000;
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        animation: spin 1s linear infinite;
+      }
+
+      @keyframes spin {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+
+      .error-message {
+        padding: 24px;
+        color: red;
+        text-align: center;
+        width: 100%;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="header"></div>
+
+    <!-- Breadcrumb Navigation -->
+    <div class="breadcrumb">
+      <a href="#">Home</a> /
+      <span id="category-breadcrumb">Cargando...</span>
+    </div>
+
+    <!-- Product Container -->
+    <div id="product-container" class="product-container">
+      <div class="loading">
+        <div class="loading-spinner"></div>
+      </div>
+    </div>
+
+    <script src="js/include_header.js"></script>
+    <script>
+      document.addEventListener("DOMContentLoaded", async function () {
+        // Get product ID from URL parameters
+        const urlParams = new URLSearchParams(window.location.search);
+        const productId = urlParams.get("product_id");
+
+        if (!productId) {
+          showError(
+            "ID del producto no especificado. Use ?product_id=<id> en la URL."
+          );
+          return;
+        }
+
+        try {
+          // Fetch product data from API
+          const response = await fetch(
+            `http://localhost:8001/producto/${productId}`
+          );
+
+          if (!response.ok) {
+            throw new Error(`Error HTTP: ${response.status}`);
+          }
+
+          const productData = await response.json();
+
+          // Update page title
+          document.title = `${productData.nombre} | Nike España`;
+
+          // Update breadcrumb
+          document.getElementById(
+            "category-breadcrumb"
+          ).innerHTML = `<a href="#">${productData.categoria}</a> / <span>${productData.nombre}</span>`;
+
+          // Build product HTML
+          const productHTML = `
+                    <!-- Product Gallery -->
+                    <div class="product-gallery">
+                        <!-- Thumbnails -->
+                        <div class="thumbnails">
+                            <div class="thumbnail">
+                                <img src="${
+                                  productData.url_imagen ||
+                                  "/api/placeholder/70/70"
+                                }" alt="${productData.nombre}">
+                            </div>
+                            <div class="thumbnail">
+                                <img src="/api/placeholder/70/70" alt="${
+                                  productData.nombre
+                                } vista alternativa">
+                            </div>
+                            <div class="thumbnail">
+                                <img src="/api/placeholder/70/70" alt="${
+                                  productData.nombre
+                                } vista alternativa">
+                            </div>
+                        </div>
+                        
+                        <!-- Main Image -->
+                        <div class="main-image">
+                            <img src="${
+                              productData.url_imagen ||
+                              "/api/placeholder/500/600"
+                            }" alt="${productData.nombre}">
+                            <div class="nav-arrows">
+                                <div class="arrow prev">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <polyline points="15 18 9 12 15 6"></polyline>
+                                    </svg>
+                                </div>
+                                <div class="arrow next">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <polyline points="9 18 15 12 9 6"></polyline>
+                                    </svg>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Product Info -->
+                    <div class="product-info">
+                        <h1 class="product-title">${productData.nombre}</h1>
+                        <p class="product-subtitle">${productData.categoria}</p>
+                        <p class="product-price">$ ${productData.precio.toFixed(
+                          2
+                        )}</p>
+                        
+                        <!-- Rating and Reviews -->
+                        <div class="rating">
+                            <div class="stars">
+                                ${generateStarRating(productData.calificacion)}
+                            </div>
+                            <span class="reviews-count">${
+                              productData.numero_resenas
+                            } reseñas</span>
+                        </div>
+                        
+                        <!-- Size Selector -->
+                        <div class="size-selector">
+                            <div class="size-selector-header">
+                                <span>Selecciona la Talla</span>
+                                <a href="#" class="size-guide">Guía de tallas</a>
+                            </div>
+                            <div class="size-options">
+                                <div class="size-option">S</div>
+                                <div class="size-option">M</div>
+                                <div class="size-option selected">L</div>
+                                <div class="size-option">XL</div>
+                            </div>
+                        </div>
+                        
+                        <!-- Add to Cart Button -->
+                        <button class="add-to-cart ${
+                          !productData.disponibilidad ? "disabled" : ""
+                        }">
+                            ${
+                              productData.disponibilidad
+                                ? "Agregar a la bolsa de compras"
+                                : "Agotado"
+                            }
+                        </button>
+                        
+                        <!-- Shipping Info -->
+                        <div class="shipping-info">
+                            <h3 class="shipping-title">Envío*</h3>
+                            <p class="shipping-text">Para obtener información de envío precisa</p>
+                            <a href="#" class="edit-location">Editar ubicación</a>
+                        </div>
+                        
+                        <!-- Product Description -->
+                        <p class="product-description">
+                            ${productData.descripcion}
+                        </p>
+                    </div>
+                `;
+
+          document.getElementById("product-container").innerHTML = productHTML;
+
+          // Add event listeners
+          const addToCartButton = document.querySelector(".add-to-cart");
+          if (
+            addToCartButton &&
+            !addToCartButton.classList.contains("disabled")
+          ) {
+            addToCartButton.addEventListener("click", function () {
+              if (!localStorage.getItem("user_cart")) {
+                localStorage.setItem("user_cart", JSON.stringify({}));
+              }
+
+              const userCart = JSON.parse(localStorage.getItem("user_cart"));
+
+              if (userCart[productId]) {
+                userCart[productId].quantity += 1;
+              } else {
+                userCart[productId] = {
+                  name: productData.nombre,
+                  price: productData.precio,
+                  quantity: 1,
+                  image: productData.url_imagen || "/api/placeholder/70/70",
+                };
+              }
+
+              localStorage.setItem("user_cart", JSON.stringify(userCart));
+
+              // Change button text and style
+              addToCartButton.textContent = "✔ Agregado al carrito";
+              addToCartButton.style.backgroundColor = "green";
+              addToCartButton.style.color = "white";
+            });
+          }
+
+          const sizeOptions = document.querySelectorAll(".size-option");
+          sizeOptions.forEach((option) => {
+            option.addEventListener("click", function () {
+              sizeOptions.forEach((o) => o.classList.remove("selected"));
+              this.classList.add("selected");
+            });
+          });
+        } catch (error) {
+          showError(`Error al cargar los datos del producto: ${error.message}`);
+          console.error("Error fetching product data:", error);
+        }
+
+        document
+          .querySelector(".sort-dropdown")
+          .addEventListener("change", (event) => {
+            const value = event.target.value;
+            let sortedProducts = [...productsData];
+
+            switch (value) {
+              case "Precio: menor a mayor":
+                sortedProducts.sort((a, b) => a.precio - b.precio);
+                break;
+              case "Precio: mayor a menor":
+                sortedProducts.sort((a, b) => b.precio - a.precio);
+                break;
+              case "Novedades":
+                // Suponiendo que tienes un campo como 'fecha' o 'novedad', puedes usar:
+                // sortedProducts.sort((a, b) => new Date(b.fecha) - new Date(a.fecha));
+                // Por ahora, simplemente no ordenaremos o simularemos
+                break;
+              case "Destacados":
+                // Aquí puedes personalizar según tus datos reales
+                // Por ejemplo, podrías tener un campo booleano `destacado` o algún ranking
+                break;
+              default:
+                return;
+            }
+
+            loadProducts(sortedProducts);
+          });
+      });
+
+      // Helper function to generate star rating HTML
+      function generateStarRating(rating) {
+        const fullStars = Math.floor(rating);
+        const hasHalfStar = rating % 1 >= 0.5;
+        const emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0);
+
+        let starsHTML = "";
+
+        // Add full stars
+        for (let i = 0; i < fullStars; i++) {
+          starsHTML += '<span class="star">★</span>';
+        }
+
+        // Add half star if needed
+        if (hasHalfStar) {
+          starsHTML += '<span class="star">★</span>';
+        }
+
+        // Add empty stars
+        for (let i = 0; i < emptyStars; i++) {
+          starsHTML += '<span class="star" style="color: #e0e0e0;">★</span>';
+        }
+
+        return starsHTML;
+      }
+
+      // Helper function to show error message
+      function showError(message) {
+        document.getElementById("product-container").innerHTML = `
+                <div class="error-message">
+                    <p>${message}</p>
+                </div>
+            `;
+      }
+    </script>
+  </body>
+</html>

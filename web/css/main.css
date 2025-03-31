@@ -27,6 +27,7 @@
   flex-direction: column;
   gap: 10px;
   color: white;
+  font-family: 'Nike Futura ND';
 }
 
 .small-text {
@@ -39,6 +40,7 @@
   font-size: 4rem;
   font-weight: 900;
   margin: 0;
+  font-family: 'Nike Futura ND';
 }
 
 .buy-text {

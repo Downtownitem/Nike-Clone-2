@@ -2,12 +2,12 @@ FROM node:18-alpine
 
 WORKDIR /app
 
-COPY package*.json ./
+COPY package.json /app
+COPY package-lock.json /app
 RUN npm install
 
 RUN npm install -g nodemon
 
-COPY . .
-
-CMD ["nodemon", "index.js"]
 EXPOSE 8001
+
+CMD ["node", "index.js"]

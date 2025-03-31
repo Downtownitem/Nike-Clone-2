@@ -1,0 +1,814 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tienda de Calzado</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Montserrat", sans-serif;
+      }
+      body {
+        background-color: #ffffff;
+        color: #111;
+      }
+      .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 20px 40px;
+        border-bottom: 1px solid #f0f0f0;
+        position: sticky;
+        top: 0;
+        background-color: white;
+        z-index: 100;
+      }
+      .logo {
+        font-weight: 600;
+        font-size: 24px;
+      }
+      .top-right {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+      }
+      .search-box {
+        display: flex;
+        align-items: center;
+        background-color: #f5f5f5;
+        border-radius: 30px;
+        padding: 8px 16px;
+      }
+      .search-box input {
+        border: none;
+        outline: none;
+        background-color: transparent;
+        padding: 5px;
+        width: 180px;
+        font-size: 14px;
+        font-family: "Montserrat", sans-serif;
+      }
+      .search-icon {
+        margin-right: 8px;
+      }
+      .container {
+        display: flex;
+        margin: 0 auto;
+        padding: 0;
+      }
+      .filters {
+        width: 300px;
+        padding: 30px 20px;
+        border-right: 1px solid #f0f0f0;
+        height: calc(100vh - 80px);
+        overflow-y: auto;
+        position: sticky;
+        top: 80px;
+      }
+      .filter-section {
+        margin-bottom: 24px;
+        border-bottom: 1px solid #f0f0f0;
+        padding-bottom: 24px;
+      }
+      .filter-section:last-child {
+        border-bottom: none;
+      }
+      .filter-title {
+        font-weight: 600;
+        margin-bottom: 16px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        cursor: pointer;
+        font-size: 16px;
+      }
+      .checkbox-item {
+        display: flex;
+        align-items: center;
+        margin-bottom: 12px;
+      }
+      .checkbox-item input[type="checkbox"] {
+        appearance: none;
+        width: 18px;
+        height: 18px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        margin-right: 10px;
+        position: relative;
+        cursor: pointer;
+      }
+      .checkbox-item input[type="checkbox"]:checked {
+        background-color: #111;
+        border-color: #111;
+      }
+      .checkbox-item input[type="checkbox"]:checked:after {
+        content: "✓";
+        position: absolute;
+        color: white;
+        font-size: 12px;
+        top: 0;
+        left: 4px;
+      }
+      .checkbox-item label {
+        font-size: 14px;
+        cursor: pointer;
+      }
+      .size-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 8px;
+        margin-bottom: 12px;
+      }
+      .size-box {
+        border: 1px solid #e5e5e5;
+        padding: 10px 0;
+        text-align: center;
+        cursor: pointer;
+        background-color: white;
+        border-radius: 4px;
+        font-size: 14px;
+        transition: all 0.2s ease;
+      }
+      .size-box:hover {
+        border-color: #111;
+      }
+      .show-more {
+        color: #757575;
+        background-color: #f5f5f5;
+        padding: 8px;
+        font-size: 12px;
+        text-align: center;
+        cursor: pointer;
+        border-radius: 4px;
+        margin-top: 8px;
+      }
+      .color-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 12px;
+      }
+      .color-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 5px;
+      }
+      .color-circle {
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+        cursor: pointer;
+        transition: transform 0.2s;
+      }
+      .color-circle:hover {
+        transform: scale(1.1);
+      }
+      .color-name {
+        font-size: 12px;
+        color: #757575;
+      }
+      .price-range {
+        width: 100%;
+        margin: 20px 0 10px;
+        -webkit-appearance: none;
+        height: 4px;
+        background: #ddd;
+        border-radius: 5px;
+        outline: none;
+      }
+      .price-range::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 18px;
+        height: 18px;
+        border-radius: 50%;
+        background: #111;
+        cursor: pointer;
+      }
+      .price-labels {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 10px;
+        font-size: 14px;
+        color: #757575;
+      }
+      .products {
+        flex: 1;
+        padding: 30px 40px;
+      }
+      .breadcrumb {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 20px;
+        color: #757575;
+        font-size: 14px;
+      }
+      .breadcrumb a {
+        color: #757575;
+        text-decoration: none;
+      }
+      .breadcrumb a:hover {
+        text-decoration: underline;
+      }
+      .search-results {
+        margin-bottom: 24px;
+      }
+      .search-results h2 {
+        font-size: 22px;
+        font-weight: 600;
+        margin-bottom: 6px;
+      }
+      .search-results p {
+        font-size: 14px;
+        color: #757575;
+      }
+      .result-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 30px;
+      }
+      .result-header h3 {
+        font-size: 18px;
+        font-weight: 500;
+      }
+      .filters-right {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+      }
+      .hide-filters-btn {
+        background: none;
+        border: none;
+        font-size: 14px;
+        font-family: "Montserrat", sans-serif;
+        font-weight: 500;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        color: #111;
+        padding: 8px 12px;
+        border-radius: 4px;
+        transition: background-color 0.2s;
+      }
+      .hide-filters-btn:hover {
+        background-color: #f5f5f5;
+      }
+      .filter-icon {
+        width: 16px;
+        height: 16px;
+      }
+      .sort-dropdown {
+        padding: 8px 12px;
+        border: 1px solid #e0e0e0;
+        border-radius: 4px;
+        background-color: white;
+        font-size: 14px;
+        font-family: "Montserrat", sans-serif;
+        cursor: pointer;
+        min-width: 200px;
+        position: relative;
+      }
+      .products-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 40px 30px;
+      }
+      .product-card {
+        display: flex;
+        flex-direction: column;
+        position: relative;
+        transition: transform 0.3s ease;
+        cursor: pointer;
+      }
+      .product-card:hover {
+        transform: translateY(-5px);
+      }
+      .product-image {
+        width: 100%;
+        aspect-ratio: 4/3;
+        object-fit: contain;
+        background-color: #f9f9f9;
+        border-radius: 8px;
+        margin-bottom: 16px;
+      }
+      .product-info {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+      }
+      .product-title {
+        font-weight: 600;
+        margin-bottom: 6px;
+        font-size: 16px;
+      }
+      .product-category {
+        margin-bottom: 6px;
+        font-size: 14px;
+        color: #757575;
+      }
+      .product-colors {
+        margin-bottom: 6px;
+        font-size: 14px;
+        color: #757575;
+      }
+      .product-price {
+        font-weight: 600;
+        font-size: 16px;
+        margin-top: auto;
+      }
+      .badge {
+        position: absolute;
+        top: 12px;
+        left: 12px;
+        background-color: #111;
+        color: white;
+        font-size: 12px;
+        padding: 4px 8px;
+        border-radius: 4px;
+        font-weight: 500;
+      }
+      .yellow {
+        background-color: #ffd700;
+      }
+      .blue {
+        background-color: #0000ff;
+      }
+      .white {
+        background-color: #ffffff;
+        border: 1px solid #e0e0e0;
+      }
+      .gray {
+        background-color: #808080;
+      }
+      .brown {
+        background-color: #a52a2a;
+      }
+      .orange {
+        background-color: #ffa500;
+      }
+      .black {
+        background-color: #000000;
+      }
+      .red {
+        background-color: #ff0000;
+      }
+      .pink {
+        background-color: #ffc0cb;
+      }
+      .green {
+        background-color: #008000;
+      }
+      .sustainable-badge {
+        display: inline-block;
+        margin-top: 8px;
+        padding: 4px 8px;
+        background-color: #f0f7e6;
+        color: #4c8b2b;
+        border-radius: 4px;
+        font-size: 12px;
+        font-weight: 500;
+      }
+      @media (max-width: 1024px) {
+        .products-grid {
+          grid-template-columns: repeat(2, 1fr);
+        }
+      }
+      @media (max-width: 768px) {
+        .container {
+          flex-direction: column;
+        }
+        .filters {
+          width: 100%;
+          height: auto;
+          border-right: none;
+          border-bottom: 1px solid #f0f0f0;
+        }
+        .products {
+          padding: 20px;
+        }
+        .products-grid {
+          grid-template-columns: repeat(2, 1fr);
+          gap: 20px;
+        }
+      }
+      @media (max-width: 480px) {
+        .products-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+      .container {
+        padding: 0px 20px;
+        padding-left: 40px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="header"></div>
+
+    <div class="container">
+      <div class="filters">
+        <!-- Comprar por descuento -->
+        <div class="filter-section">
+          <div class="filter-title">
+            <span>Comprar por descuento</span>
+            <span>^</span>
+          </div>
+          <div class="filter-content">
+            <div class="checkbox-item">
+              <input type="checkbox" id="discount-10" />
+              <label for="discount-10">10%</label>
+            </div>
+            <div class="checkbox-item">
+              <input type="checkbox" id="discount-15" />
+              <label for="discount-15">15%</label>
+            </div>
+            <div class="checkbox-item">
+              <input type="checkbox" id="discount-20" />
+              <label for="discount-20">20%</label>
+            </div>
+            <div class="checkbox-item">
+              <input type="checkbox" id="discount-25" />
+              <label for="discount-25">25%</label>
+            </div>
+            <div class="checkbox-item">
+              <input type="checkbox" id="discount-30" />
+              <label for="discount-30">30%</label>
+            </div>
+            <div class="checkbox-item">
+              <input type="checkbox" id="discount-40" />
+              <label for="discount-40">40%</label>
+            </div>
+          </div>
+        </div>
+
+        <!-- Género -->
+        <div class="filter-section">
+          <div class="filter-title">
+            <span>Género</span>
+            <span>^</span>
+          </div>
+          <div class="filter-content">
+            <div class="checkbox-item">
+              <input type="checkbox" id="gender-man" />
+              <label for="gender-man">Hombre</label>
+            </div>
+            <div class="checkbox-item">
+              <input type="checkbox" id="gender-woman" />
+              <label for="gender-woman">Mujer</label>
+            </div>
+            <div class="checkbox-item">
+              <input type="checkbox" id="gender-girl" />
+              <label for="gender-girl">Niña</label>
+            </div>
+            <div class="checkbox-item">
+              <input type="checkbox" id="gender-boy" />
+              <label for="gender-boy">Niño</label>
+            </div>
+            <div class="checkbox-item">
+              <input type="checkbox" id="gender-unisex" />
+              <label for="gender-unisex">Unisex</label>
+            </div>
+          </div>
+        </div>
+
+        <!-- Talla -->
+        <div class="filter-section">
+          <div class="filter-title">
+            <span>Talla</span>
+            <span>^</span>
+          </div>
+          <div class="filter-content">
+            <div class="size-grid">
+              <div class="size-box">1</div>
+              <div class="size-box">1.5Y</div>
+              <div class="size-box">10</div>
+              <div class="size-box">10.5</div>
+              <div class="size-box">11</div>
+              <div class="size-box">12</div>
+              <div class="size-box">1Y</div>
+              <div class="size-box">2.5Y</div>
+              <div class="size-box">2Y</div>
+              <div class="size-box">3</div>
+            </div>
+            <div class="show-more">Mostrar 35 más</div>
+          </div>
+        </div>
+
+        <!-- Categoría -->
+        <div class="filter-section" id="category-section">
+          <div class="filter-title">
+            <span>Categoría</span>
+            <span>^</span>
+          </div>
+          <div class="filter-content" id="category-filters">
+            <!-- Categorías dinámicas -->
+          </div>
+        </div>
+
+        <!-- Color -->
+        <div class="filter-section">
+          <div class="filter-title">
+            <span>Color</span>
+            <span>^</span>
+          </div>
+          <div class="filter-content">
+            <div class="color-grid">
+              <div class="color-item">
+                <div class="color-circle yellow"></div>
+                <span class="color-name">Amarillo</span>
+              </div>
+              <div class="color-item">
+                <div class="color-circle blue"></div>
+                <span class="color-name">Azul</span>
+              </div>
+              <div class="color-item">
+                <div class="color-circle white"></div>
+                <span class="color-name">Blanco</span>
+              </div>
+              <div class="color-item">
+                <div class="color-circle gray"></div>
+                <span class="color-name">Gris</span>
+              </div>
+              <div class="color-item">
+                <div class="color-circle brown"></div>
+                <span class="color-name">Marrón</span>
+              </div>
+              <div class="color-item">
+                <div class="color-circle orange"></div>
+                <span class="color-name">Naranja</span>
+              </div>
+              <div class="color-item">
+                <div class="color-circle black"></div>
+                <span class="color-name">Negro</span>
+              </div>
+              <div class="color-item">
+                <div class="color-circle red"></div>
+                <span class="color-name">Rojo</span>
+              </div>
+              <div class="color-item">
+                <div class="color-circle pink"></div>
+                <span class="color-name">Rosa</span>
+              </div>
+              <div class="color-item">
+                <div class="color-circle green"></div>
+                <span class="color-name">Verde</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Marca -->
+        <div class="filter-section">
+          <div class="filter-title">
+            <span>Marca</span>
+            <span>^</span>
+          </div>
+          <div class="filter-content">
+            <div class="checkbox-item">
+              <input type="checkbox" id="brand-jordan" />
+              <label for="brand-jordan">Jordan</label>
+            </div>
+            <div class="checkbox-item">
+              <input type="checkbox" id="brand-nike" />
+              <label for="brand-nike">Nike</label>
+            </div>
+          </div>
+        </div>
+
+        <!-- Promoción -->
+        <div class="filter-section">
+          <div class="filter-title">
+            <span>Promoción</span>
+            <span>^</span>
+          </div>
+          <div class="filter-content">
+            <div class="checkbox-item">
+              <input type="checkbox" id="promo-yes" />
+              <label for="promo-yes">Yes</label>
+            </div>
+          </div>
+        </div>
+
+        <!-- Rangos de precio -->
+        <div class="filter-section">
+          <div class="filter-title">
+            <span>Rangos de precio</span>
+            <span>^</span>
+          </div>
+          <div class="filter-content">
+            <input
+              type="range"
+              min="45465"
+              max="1729950"
+              value="45465"
+              class="price-range"
+              id="price-range"
+            />
+            <div class="price-labels">
+              <span>$45.465</span>
+              <span>$1.729.950</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="products">
+        <div class="breadcrumb">
+          <a href="#">Home</a> / <span>Calzado</span>
+        </div>
+
+        <div class="result-header">
+          <h3>Calzado (6)</h3>
+          <div class="filters-right">
+            <button class="hide-filters-btn">
+              <span>Ocultar filtros</span>
+              <svg
+                class="filter-icon"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path d="M4 6h16M4 12h16M4 18h7"></path>
+              </svg>
+            </button>
+            <select class="sort-dropdown">
+              <option>Ordenar por</option>
+              <option>Precio: menor a mayor</option>
+              <option>Precio: mayor a menor</option>
+              <option>Novedades</option>
+              <option>Destacados</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="products-grid" id="products-container">
+          <!-- Productos dinámicos -->
+        </div>
+      </div>
+    </div>
+
+    <script src="js/include_header.js"></script>
+    <script>
+      // Datos de prueba
+      let productsData = [];
+
+      // Función para formatear el precio
+      function formatPrice(price) {
+        return "$" + price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+      }
+
+      // Cargar productos
+      function loadProducts(products) {
+        const container = document.getElementById("products-container");
+        container.innerHTML = "";
+
+        products.forEach((product) => {
+          const productElement = document.createElement("div");
+          productElement.className = "product-card";
+          productElement.innerHTML = `
+        <img src="${product.url_imagen}" alt="${
+            product.nombre
+          }" class="product-image">
+        <div class="product-info">
+        <div class="product-title">${product.nombre}</div>
+        <div class="product-category">${product.descripcion}</div>
+        <div class="product-colors">${product.colores} ${
+            product.colores > 1 ? "colores" : "color"
+          }</div>
+        <div class="product-price">${formatPrice(product.precio)}</div>
+        </div>
+          `;
+          productElement.addEventListener("click", () => {
+            window.location.href = `/product.html?product_id=${product.id}`;
+          });
+          container.appendChild(productElement);
+        });
+
+        // Update the number next to "Calzado"
+        document.querySelector(
+          ".result-header h3"
+        ).textContent = `Calzado (${products.length})`;
+      }
+
+      // Cargar categorías dinámicamente
+      function loadCategories(products) {
+        const categories = [...new Set(products.map((p) => p.categoria))];
+        const container = document.getElementById("category-filters");
+        container.innerHTML = "";
+
+        categories.forEach((category, index) => {
+          const categoryElement = document.createElement("div");
+          categoryElement.className = "checkbox-item";
+          categoryElement.innerHTML = `
+          <input type="checkbox" id="category-${index}" data-category="${category}">
+          <label for="category-${index}">${category}</label>
+        `;
+          container.appendChild(categoryElement);
+
+          // Añadir evento para filtrar por categoría
+          const checkbox = categoryElement.querySelector("input");
+          checkbox.addEventListener("change", filterProductsByCategory);
+        });
+      }
+
+      // Filtrar productos por categoría
+      function filterProductsByCategory() {
+        const selectedCategories = Array.from(
+          document.querySelectorAll("#category-filters input:checked")
+        ).map((input) => input.getAttribute("data-category"));
+
+        let filteredProducts = productsData;
+
+        if (selectedCategories.length > 0) {
+          filteredProducts = productsData.filter((product) =>
+            selectedCategories.includes(product.categoria)
+          );
+        }
+
+        loadProducts(filteredProducts);
+
+        // Actualizar contador de resultados
+        document.querySelector(
+          ".search-results p"
+        ).textContent = `Mostrando ${filteredProducts.length} resultados`;
+        document.querySelector(
+          ".result-header h3"
+        ).textContent = `Calzado (${filteredProducts.length})`;
+      }
+
+      // Inicializar la página
+      document.addEventListener("DOMContentLoaded", () => {
+        fetch("http://localhost:8001/productos", {
+          method: "GET",
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            loadProducts(data);
+            loadCategories(data);
+            productsData = data;
+          })
+          .catch((error) => {
+            console.error("Error al obtener los datos:", error);
+          });
+
+        // Evento para "Mostrar más" en tallas
+        document
+          .querySelector(".show-more")
+          .addEventListener("click", function () {
+            alert("Se mostrarían 35 tallas más");
+          });
+
+        // Evento para ocultar filtros
+        document
+          .querySelector(".hide-filters-btn")
+          .addEventListener("click", function () {
+            const filters = document.querySelector(".filters");
+            const products = document.querySelector(".products");
+
+            if (filters.style.display === "none") {
+              filters.style.display = "block";
+              products.style.paddingLeft = "40px";
+              this.querySelector("span").textContent = "Ocultar filtros";
+            } else {
+              filters.style.display = "none";
+              products.style.paddingLeft = "80px";
+              this.querySelector("span").textContent = "Mostrar filtros";
+            }
+          });
+
+        // Simular interacción con los filtros
+        const sizeBoxes = document.querySelectorAll(".size-box");
+        sizeBoxes.forEach((box) => {
+          box.addEventListener("click", function () {
+            this.style.border =
+              this.style.border === "1px solid rgb(17, 17, 17)"
+                ? "1px solid #e5e5e5"
+                : "1px solid rgb(17, 17, 17)";
+          });
+        });
+
+        // Simular una carga desde la API
+        console.log("Datos cargados de la API...");
+      });
+
+      // Simular la carga desde la API
+      async function fetchProductsFromAPI() {
+        try {
+          // En un entorno real, se reemplazaría con:
+          // const response = await fetch('/api/products');
+          // const data = await response.json();
+          return productsData;
+        } catch (error) {
+          console.error("Error al cargar productos:", error);
+          return [];
+        }
+      }
+    </script>
+  </body>
+</html>
