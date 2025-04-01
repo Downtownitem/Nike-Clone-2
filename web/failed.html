@@ -158,7 +158,7 @@
 
       <div class="transaction-details">
         <div class="detail-row">
-          <span class="label">ID de Producto:</span>
+          <span class="label">ID de pago:</span>
           <span id="product-id" class="value">Cargando...</span>
         </div>
         <div class="detail-row">
@@ -198,11 +198,10 @@
       document.addEventListener("DOMContentLoaded", function () {
         // Obtener parámetros desde URL
         const urlParams = new URLSearchParams(window.location.search);
-        const productId = urlParams.get("product_id") || "No disponible";
+        const sessionId = urlParams.get("session_id") || "No disponible";
         const errorCode = urlParams.get("error_code") || "unknown_error";
 
-        document.getElementById("product-id").textContent = productId;
-
+        document.getElementById("product-id").textContent = sessionId;
         document.getElementById("error-code").textContent = errorCode;
 
         const errorMessages = {
@@ -228,14 +227,36 @@
           year: "numeric",
         });
         document.getElementById("current-date").textContent = formattedDate;
+
+        // ✅ Enviar estado 'cancelado' al backend si hay session_id
+        if (sessionId !== "No disponible") {
+          fetch("http://localhost:8001/update-order-status", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              session_id: sessionId,
+              estado: "cancelado",
+            }),
+          })
+            .then((res) => {
+              if (!res.ok) {
+                throw new Error("Error al actualizar el estado del pedido.");
+              }
+              return res.json();
+            })
+            .then((data) => {
+              console.log("Estado cancelado registrado correctamente:", data);
+            })
+            .catch((err) => {
+              console.error("Error al actualizar el estado a cancelado:", err);
+            });
+        }
       });
 
       function retryPayment() {
-        window.location.href = "/checkout";
-      }
-
-      function contactSupport() {
-        window.location.href = "/contacto";
+        window.location.href = "/checkout.html";
       }
     </script>
   </body>

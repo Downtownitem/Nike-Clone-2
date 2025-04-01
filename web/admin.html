@@ -1,0 +1,1172 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Panel de Administración</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Montserrat", sans-serif;
+      }
+
+      :root {
+        --primary: #4361ee;
+        --secondary: #3f37c9;
+        --success: #4cc9f0;
+        --danger: #ef476f;
+        --warning: #ffd166;
+        --light: #f8f9fa;
+        --dark: #212529;
+        --gray: #6c757d;
+        --sidebar-width: 250px;
+      }
+
+      body {
+        background-color: #f5f7fb;
+        color: var(--dark);
+      }
+
+      .container {
+        display: flex;
+        min-height: 100vh;
+      }
+
+      .sidebar {
+        width: var(--sidebar-width);
+        background-color: white;
+        box-shadow: 0 0 15px rgba(0, 0, 0, 0.05);
+        position: fixed;
+        height: 100vh;
+        overflow-y: auto;
+        z-index: 100;
+      }
+
+      .sidebar-header {
+        padding: 20px;
+        text-align: center;
+        border-bottom: 1px solid #eee;
+      }
+
+      .sidebar-logo {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: var(--primary);
+      }
+
+      .nav-item {
+        padding: 15px 20px;
+        display: flex;
+        align-items: center;
+        color: var(--gray);
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-weight: 500;
+      }
+
+      .nav-item:hover,
+      .nav-item.active {
+        background-color: #f8f9fa;
+        color: var(--primary);
+        border-left: 3px solid var(--primary);
+      }
+
+      .nav-item i {
+        margin-right: 10px;
+        font-size: 1.2rem;
+      }
+
+      .main-content {
+        flex: 1;
+        margin-left: var(--sidebar-width);
+        padding: 20px;
+      }
+
+      .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 30px;
+        padding-bottom: 20px;
+        border-bottom: 1px solid #eee;
+      }
+
+      .page-title {
+        font-size: 1.8rem;
+        font-weight: 600;
+        color: var(--dark);
+      }
+
+      .content-card {
+        background-color: white;
+        border-radius: 10px;
+        box-shadow: 0 0 15px rgba(0, 0, 0, 0.05);
+        padding: 20px;
+        margin-bottom: 20px;
+      }
+
+      .card-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+        padding-bottom: 10px;
+        border-bottom: 1px solid #eee;
+      }
+
+      .card-title {
+        font-size: 1.2rem;
+        font-weight: 600;
+      }
+
+      .btn {
+        padding: 8px 16px;
+        border: none;
+        border-radius: 5px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+
+      .btn-primary {
+        background-color: var(--primary);
+        color: white;
+      }
+
+      .btn-primary:hover {
+        background-color: var(--secondary);
+      }
+
+      .btn-success {
+        background-color: var(--success);
+        color: white;
+      }
+
+      .btn-danger {
+        background-color: var(--danger);
+        color: white;
+      }
+
+      .btn-sm {
+        padding: 5px 10px;
+        font-size: 0.8rem;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+
+      th {
+        text-align: left;
+        padding: 12px 15px;
+        background-color: #f8f9fa;
+        font-weight: 600;
+      }
+
+      td {
+        padding: 12px 15px;
+        border-bottom: 1px solid #eee;
+      }
+
+      .actions {
+        display: flex;
+        gap: 5px;
+      }
+
+      .modal {
+        display: none;
+        position: fixed;
+        z-index: 999;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        align-items: center;
+        justify-content: center;
+      }
+
+      .modal-content {
+        background-color: white;
+        padding: 20px;
+        border-radius: 10px;
+        width: 500px;
+        max-width: 90%;
+        box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+      }
+
+      .modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+        padding-bottom: 10px;
+        border-bottom: 1px solid #eee;
+      }
+
+      .modal-title {
+        font-size: 1.2rem;
+        font-weight: 600;
+      }
+
+      .close {
+        font-size: 1.5rem;
+        font-weight: 700;
+        cursor: pointer;
+        color: var(--gray);
+      }
+
+      .form-group {
+        margin-bottom: 15px;
+      }
+
+      .form-group label {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: 500;
+      }
+
+      .form-control {
+        width: 100%;
+        padding: 8px 12px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        font-size: 1rem;
+      }
+
+      .tab-content {
+        display: none;
+      }
+
+      .tab-content.active {
+        display: block;
+      }
+
+      .pedidos-container {
+        padding: 20px;
+        background-color: #f8f9fa;
+        border-radius: 5px;
+        margin-top: 20px;
+      }
+
+      .pedido-item {
+        background-color: white;
+        border-radius: 5px;
+        padding: 15px;
+        margin-bottom: 15px;
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.05);
+      }
+
+      .pedido-header {
+        display: flex;
+        justify-content: space-between;
+        padding-bottom: 10px;
+        border-bottom: 1px solid #eee;
+        margin-bottom: 10px;
+      }
+
+      .detalles-table {
+        width: 100%;
+        margin-top: 10px;
+        font-size: 0.9rem;
+      }
+
+      .notification {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        padding: 15px 20px;
+        border-radius: 5px;
+        color: white;
+        font-weight: 500;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        z-index: 1000;
+      }
+
+      .notification.success {
+        background-color: var(--success);
+      }
+
+      .notification.error {
+        background-color: var(--danger);
+      }
+
+      .notification.show {
+        opacity: 1;
+      }
+
+      /* Responsive */
+      @media (max-width: 768px) {
+        .sidebar {
+          width: 100%;
+          height: auto;
+          position: relative;
+        }
+        .main-content {
+          margin-left: 0;
+        }
+        .container {
+          flex-direction: column;
+        }
+      }
+    </style>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+  </head>
+  <body>
+    <div class="container">
+      <div class="sidebar">
+        <div class="sidebar-header">
+          <div class="sidebar-logo">Admin Panel</div>
+        </div>
+        <div class="nav-item active" onclick="changeTab('usuarios')">
+          <i class="fas fa-users"></i> Usuarios
+        </div>
+        <div class="nav-item" onclick="changeTab('productos')">
+          <i class="fas fa-boxes"></i> Productos
+        </div>
+      </div>
+
+      <div class="main-content">
+        <div class="header">
+          <h1 class="page-title">Panel de Administración</h1>
+        </div>
+
+        <!-- Usuarios Tab -->
+        <div id="usuarios-tab" class="tab-content active">
+          <div class="content-card">
+            <div class="card-header">
+              <h2 class="card-title">Gestión de Usuarios</h2>
+              <button
+                class="btn btn-primary"
+                onclick="showModal('add-usuario-modal')"
+              >
+                <i class="fas fa-plus"></i> Nuevo Usuario
+              </button>
+            </div>
+            <div id="usuarios-table-container">
+              <table id="usuarios-table">
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>Nombre</th>
+                    <th>Email</th>
+                    <th>Acciones</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <!-- Datos cargados con JavaScript -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- Productos Tab -->
+        <div id="productos-tab" class="tab-content">
+          <div class="content-card">
+            <div class="card-header">
+              <h2 class="card-title">Gestión de Productos</h2>
+              <button
+                class="btn btn-primary"
+                onclick="showModal('add-producto-modal')"
+              >
+                <i class="fas fa-plus"></i> Nuevo Producto
+              </button>
+            </div>
+            <div id="productos-table-container">
+              <table id="productos-table">
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>Nombre</th>
+                    <th>Precio</th>
+                    <th>Acciones</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <!-- Datos cargados con JavaScript -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- Pedidos Tab (se muestra al hacer clic en ver pedidos de un usuario) -->
+        <div id="pedidos-tab" class="tab-content">
+          <div class="content-card">
+            <div class="card-header">
+              <h2 class="card-title">
+                Pedidos del Usuario: <span id="pedidos-usuario-nombre"></span>
+              </h2>
+              <button class="btn btn-primary" onclick="volverAUsuarios()">
+                <i class="fas fa-arrow-left"></i> Volver a Usuarios
+              </button>
+            </div>
+            <div id="pedidos-container" class="pedidos-container">
+              <!-- Pedidos cargados con JavaScript -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modales -->
+    <!-- Modal Agregar Usuario -->
+    <div id="add-usuario-modal" class="modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3 class="modal-title">Agregar Nuevo Usuario</h3>
+          <span class="close" onclick="closeModal('add-usuario-modal')"
+            >&times;</span
+          >
+        </div>
+        <form id="add-usuario-form">
+          <div class="form-group">
+            <label for="nombre">Nombre</label>
+            <input type="text" id="nombre" class="form-control" required />
+          </div>
+          <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" id="email" class="form-control" required />
+          </div>
+          <div class="form-group">
+            <label for="telefono">Teléfono</label>
+            <input type="text" id="telefono" class="form-control" />
+          </div>
+          <div class="form-group">
+            <label for="direccion">Dirección</label>
+            <input type="text" id="direccion" class="form-control" />
+          </div>
+          <button type="submit" class="btn btn-primary">Guardar</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Modal Editar Usuario -->
+    <div id="edit-usuario-modal" class="modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3 class="modal-title">Editar Usuario</h3>
+          <span class="close" onclick="closeModal('edit-usuario-modal')"
+            >&times;</span
+          >
+        </div>
+        <form id="edit-usuario-form">
+          <input type="hidden" id="edit-usuario-id" />
+          <div class="form-group">
+            <label for="edit-nombre">Nombre</label>
+            <input type="text" id="edit-nombre" class="form-control" required />
+          </div>
+          <div class="form-group">
+            <label for="edit-email">Email</label>
+            <input type="email" id="edit-email" class="form-control" required />
+          </div>
+          <div class="form-group">
+            <label for="edit-telefono">Teléfono</label>
+            <input type="text" id="edit-telefono" class="form-control" />
+          </div>
+          <div class="form-group">
+            <label for="edit-direccion">Dirección</label>
+            <input type="text" id="edit-direccion" class="form-control" />
+          </div>
+          <button type="submit" class="btn btn-primary">Actualizar</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Modal Agregar Producto -->
+    <!-- Modal Agregar Producto -->
+    <div id="add-producto-modal" class="modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3 class="modal-title">Agregar Nuevo Producto</h3>
+          <span class="close" onclick="closeModal('add-producto-modal')"
+            >&times;</span
+          >
+        </div>
+        <form id="add-producto-form">
+          <div class="form-group">
+            <label for="producto-nombre">Nombre</label>
+            <input
+              type="text"
+              id="producto-nombre"
+              class="form-control"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label for="precio">Precio</label>
+            <input
+              type="number"
+              id="precio"
+              class="form-control"
+              step="0.01"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label for="descripcion">Descripción</label>
+            <textarea id="descripcion" class="form-control"></textarea>
+          </div>
+          <div class="form-group">
+            <label for="categoria">Categoría</label>
+            <input type="text" id="categoria" class="form-control" />
+          </div>
+          <div class="form-group">
+            <label for="disponibilidad">Disponibilidad</label>
+            <select id="disponibilidad" class="form-control">
+              <option value="1">Disponible</option>
+              <option value="0">No disponible</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="calificacion">Calificación</label>
+            <input
+              type="number"
+              id="calificacion"
+              class="form-control"
+              step="0.1"
+              min="0"
+              max="5"
+            />
+          </div>
+          <div class="form-group">
+            <label for="numero-resenas">Número de Reseñas</label>
+            <input
+              type="number"
+              id="numero-resenas"
+              class="form-control"
+              min="0"
+            />
+          </div>
+          <div class="form-group">
+            <label for="url-imagen">URL de Imagen</label>
+            <input type="text" id="url-imagen" class="form-control" />
+          </div>
+          <button type="submit" class="btn btn-primary">Guardar</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Modal Editar Producto -->
+    <!-- Formulario Modal Editar Producto actualizado -->
+    <div id="edit-producto-modal" class="modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3 class="modal-title">Editar Producto</h3>
+          <span class="close" onclick="closeModal('edit-producto-modal')"
+            >&times;</span
+          >
+        </div>
+        <form id="edit-producto-form">
+          <input type="hidden" id="edit-producto-id" />
+          <div class="form-group">
+            <label for="edit-producto-nombre">Nombre</label>
+            <input
+              type="text"
+              id="edit-producto-nombre"
+              class="form-control"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label for="edit-precio">Precio</label>
+            <input
+              type="number"
+              id="edit-precio"
+              class="form-control"
+              step="0.01"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label for="edit-descripcion">Descripción</label>
+            <textarea id="edit-descripcion" class="form-control"></textarea>
+          </div>
+          <div class="form-group">
+            <label for="edit-categoria">Categoría</label>
+            <input type="text" id="edit-categoria" class="form-control" />
+          </div>
+          <div class="form-group">
+            <label for="edit-disponibilidad">Disponibilidad</label>
+            <select id="edit-disponibilidad" class="form-control">
+              <option value="1">Disponible</option>
+              <option value="0">No disponible</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="edit-calificacion">Calificación</label>
+            <input
+              type="number"
+              id="edit-calificacion"
+              class="form-control"
+              step="0.1"
+              min="0"
+              max="5"
+            />
+          </div>
+          <div class="form-group">
+            <label for="edit-numero-resenas">Número de Reseñas</label>
+            <input
+              type="number"
+              id="edit-numero-resenas"
+              class="form-control"
+              min="0"
+            />
+          </div>
+          <div class="form-group">
+            <label for="edit-url-imagen">URL de Imagen</label>
+            <input type="text" id="edit-url-imagen" class="form-control" />
+          </div>
+          <button type="submit" class="btn btn-primary">Actualizar</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Notificación -->
+    <div id="notification" class="notification"></div>
+
+    <script>
+      // Variables globales
+      let usuarios = [];
+      let productos = [];
+      let currentUsuarioId = null;
+
+      // Función para inicializar la aplicación
+      document.addEventListener("DOMContentLoaded", () => {
+        cargarUsuarios();
+        cargarProductos();
+
+        // Event listeners para formularios
+        document
+          .getElementById("add-usuario-form")
+          .addEventListener("submit", agregarUsuario);
+        document
+          .getElementById("edit-usuario-form")
+          .addEventListener("submit", actualizarUsuario);
+        document
+          .getElementById("add-producto-form")
+          .addEventListener("submit", agregarProducto);
+        document
+          .getElementById("edit-producto-form")
+          .addEventListener("submit", actualizarProducto);
+      });
+
+      // Función para cambiar entre pestañas
+      function changeTab(tabName) {
+        const tabs = document.getElementsByClassName("tab-content");
+        for (let i = 0; i < tabs.length; i++) {
+          tabs[i].classList.remove("active");
+        }
+
+        const navItems = document.getElementsByClassName("nav-item");
+        for (let i = 0; i < navItems.length; i++) {
+          navItems[i].classList.remove("active");
+        }
+
+        if (tabName === "usuarios") {
+          document.getElementById("usuarios-tab").classList.add("active");
+          document
+            .querySelector(".nav-item:nth-child(2)")
+            .classList.add("active");
+        } else if (tabName === "productos") {
+          document.getElementById("productos-tab").classList.add("active");
+          document
+            .querySelector(".nav-item:nth-child(3)")
+            .classList.add("active");
+        }
+      }
+
+      // Funciones para modales
+      function showModal(modalId) {
+        document.getElementById(modalId).style.display = "flex";
+      }
+
+      function closeModal(modalId) {
+        document.getElementById(modalId).style.display = "none";
+      }
+
+      // Funciones de notificación
+      function showNotification(message, type) {
+        const notification = document.getElementById("notification");
+        notification.textContent = message;
+        notification.className = "notification " + type;
+        notification.classList.add("show");
+
+        setTimeout(() => {
+          notification.classList.remove("show");
+        }, 3000);
+      }
+
+      // ================== USUARIOS ==================
+      // Cargar usuarios
+      function cargarUsuarios() {
+        fetch("http://localhost:8001/admin/usuarios")
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error("Error al cargar usuarios");
+            }
+            return response.json();
+          })
+          .then((data) => {
+            usuarios = data;
+            renderizarUsuarios();
+          })
+          .catch((error) => {
+            console.error("Error:", error);
+            showNotification(error.message, "error");
+          });
+      }
+
+      // Renderizar tabla de usuarios
+      function renderizarUsuarios() {
+        const tbody = document.querySelector("#usuarios-table tbody");
+        tbody.innerHTML = "";
+
+        usuarios.forEach((usuario) => {
+          const tr = document.createElement("tr");
+          tr.innerHTML = `
+                    <td>${usuario.id}</td>
+                    <td>${usuario.nombre}</td>
+                    <td>${usuario.email}</td>
+                    <td class="actions">
+                        <button class="btn btn-sm btn-primary" onclick="verPedidosUsuario(${usuario.id}, '${usuario.nombre}')">
+                            <i class="fas fa-shopping-cart"></i> Pedidos
+                        </button>
+                        <button class="btn btn-sm btn-success" onclick="editarUsuario(${usuario.id})">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="btn btn-sm btn-danger" onclick="eliminarUsuario(${usuario.id})">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </td>
+                `;
+          tbody.appendChild(tr);
+        });
+      }
+
+      // Agregar nuevo usuario
+      function agregarUsuario(e) {
+        e.preventDefault();
+
+        const nuevoUsuario = {
+          nombre: document.getElementById("nombre").value,
+          email: document.getElementById("email").value,
+          telefono: document.getElementById("telefono").value,
+          direccion: document.getElementById("direccion").value,
+        };
+
+        fetch("http://localhost:8001/admin/usuarios", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(nuevoUsuario),
+        })
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error("Error al agregar usuario");
+            }
+            return response.json();
+          })
+          .then((data) => {
+            closeModal("add-usuario-modal");
+            document.getElementById("add-usuario-form").reset();
+            showNotification("Usuario agregado correctamente", "success");
+            cargarUsuarios();
+          })
+          .catch((error) => {
+            console.error("Error:", error);
+            showNotification(error.message, "error");
+          });
+      }
+
+      // Preparar formulario para editar usuario
+      function editarUsuario(id) {
+        const usuario = usuarios.find((u) => u.id === id);
+        if (usuario) {
+          document.getElementById("edit-usuario-id").value = usuario.id;
+          document.getElementById("edit-nombre").value = usuario.nombre;
+          document.getElementById("edit-email").value = usuario.email;
+          document.getElementById("edit-telefono").value =
+            usuario.telefono || "";
+          document.getElementById("edit-direccion").value =
+            usuario.direccion || "";
+
+          showModal("edit-usuario-modal");
+        }
+      }
+
+      // Actualizar usuario
+      function actualizarUsuario(e) {
+        e.preventDefault();
+
+        const id = document.getElementById("edit-usuario-id").value;
+        const usuarioActualizado = {
+          nombre: document.getElementById("edit-nombre").value,
+          email: document.getElementById("edit-email").value,
+          telefono: document.getElementById("edit-telefono").value,
+          direccion: document.getElementById("edit-direccion").value,
+        };
+
+        fetch(`http://localhost:8001/admin/usuarios/${id}`, {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(usuarioActualizado),
+        })
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error("Error al actualizar usuario");
+            }
+            return response.json();
+          })
+          .then((data) => {
+            closeModal("edit-usuario-modal");
+            showNotification("Usuario actualizado correctamente", "success");
+            cargarUsuarios();
+          })
+          .catch((error) => {
+            console.error("Error:", error);
+            showNotification(error.message, "error");
+          });
+      }
+
+      // Eliminar usuario
+      function eliminarUsuario(id) {
+        if (confirm("¿Estás seguro de que deseas eliminar este usuario?")) {
+          fetch(`http://localhost:8001/admin/usuarios/${id}`, {
+            method: "DELETE",
+          })
+            .then((response) => {
+              if (!response.ok) {
+                throw new Error("Error al eliminar usuario");
+              }
+              return response.json();
+            })
+            .then((data) => {
+              showNotification("Usuario eliminado correctamente", "success");
+              cargarUsuarios();
+            })
+            .catch((error) => {
+              console.error("Error:", error);
+              showNotification(error.message, "error");
+            });
+        }
+      }
+
+      // Ver pedidos de un usuario
+      function verPedidosUsuario(id, nombre) {
+        currentUsuarioId = id;
+        document.getElementById("pedidos-usuario-nombre").textContent = nombre;
+
+        fetch(`http://localhost:8001/admin/usuarios/${id}/pedidos`)
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error("El usuario no tiene pedidos");
+            }
+            return response.json();
+          })
+          .then((data) => {
+            renderizarPedidos(data);
+
+            const tabs = document.getElementsByClassName("tab-content");
+            for (let i = 0; i < tabs.length; i++) {
+              tabs[i].classList.remove("active");
+            }
+
+            document.getElementById("pedidos-tab").classList.add("active");
+          })
+          .catch((error) => {
+            console.error("Error:", error);
+            showNotification(error.message, "error");
+          });
+      }
+
+      // Renderizar pedidos
+      function renderizarPedidos(pedidos) {
+        const container = document.getElementById("pedidos-container");
+        container.innerHTML = "";
+
+        if (pedidos.length === 0) {
+          container.innerHTML = "<p>Este usuario no tiene pedidos.</p>";
+          return;
+        }
+
+        pedidos.forEach((pedido) => {
+          const pedidoDiv = document.createElement("div");
+          pedidoDiv.className = "pedido-item";
+
+          const fecha = new Date(pedido.fecha).toLocaleDateString();
+          const total = pedido.detalles.reduce(
+            (sum, item) =>
+              sum + parseFloat(item.precio) * parseInt(item.cantidad),
+            0
+          );
+
+          pedidoDiv.innerHTML = `
+                    <div class="pedido-header">
+                        <div>
+                            <strong>Pedido #${pedido.id}</strong>
+                            <p>Fecha: ${fecha}</p>
+                            <p>Estado: ${pedido.estado || "Procesando"}</p>
+                        </div>
+                        <div>
+                            <strong>Total: $${total.toFixed(2)}</strong>
+                        </div>
+                    </div>
+                    <h4>Detalles del pedido:</h4>
+                    <table class="detalles-table">
+                        <thead>
+                            <tr>
+                                <th>Producto</th>
+                                <th>Precio</th>
+                                <th>Cantidad</th>
+                                <th>Subtotal</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${pedido.detalles
+                              .map(
+                                (detalle) => `
+                                <tr>
+                                    <td>${
+                                      detalle.producto_nombre ||
+                                      `Producto #${detalle.producto_id}`
+                                    }</td>
+                                    <td>$${parseFloat(detalle.precio).toFixed(
+                                      2
+                                    )}</td>
+                                    <td>${detalle.cantidad}</td>
+                                    <td>$${(
+                                      parseFloat(detalle.precio) *
+                                      parseInt(detalle.cantidad)
+                                    ).toFixed(2)}</td>
+                                </tr>
+                            `
+                              )
+                              .join("")}
+                        </tbody>
+                    </table>
+                `;
+
+          container.appendChild(pedidoDiv);
+        });
+      }
+
+      // Volver a la pestaña de usuarios desde pedidos
+      function volverAUsuarios() {
+        changeTab("usuarios");
+      }
+
+      // ================== PRODUCTOS ==================
+      // Cargar productos
+      function cargarProductos() {
+        fetch("http://localhost:8001/admin/productos")
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error("Error al cargar productos");
+            }
+            return response.json();
+          })
+          .then((data) => {
+            productos = data;
+            renderizarProductos();
+          })
+          .catch((error) => {
+            console.error("Error:", error);
+            showNotification(error.message, "error");
+          });
+      }
+
+      // Renderizar tabla de productos
+      function renderizarProductos() {
+        const tbody = document.querySelector("#productos-table tbody");
+        tbody.innerHTML = "";
+
+        productos.forEach((producto) => {
+          const tr = document.createElement("tr");
+          tr.innerHTML = `
+                    <td>${producto.id}</td>
+                    <td>${producto.nombre}</td>
+                    <td>$${parseFloat(producto.precio).toFixed(2)}</td>
+                    <td class="actions">
+                        <button class="btn btn-sm btn-success" onclick="editarProducto(${
+                          producto.id
+                        })">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="btn btn-sm btn-danger" onclick="eliminarProducto(${
+                          producto.id
+                        })">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </td>
+                `;
+          tbody.appendChild(tr);
+        });
+      }
+
+      // Agregar nuevo producto
+      // Agregar nuevo producto
+      function agregarProducto(e) {
+        e.preventDefault();
+
+        const nuevoProducto = {
+          nombre: document.getElementById("producto-nombre").value,
+          descripcion: document.getElementById("descripcion").value,
+          precio: document.getElementById("precio").value,
+          categoria: document.getElementById("categoria").value,
+          disponibilidad:
+            document.getElementById("disponibilidad").value === "1",
+          calificacion: document.getElementById("calificacion").value,
+          numero_resenas: document.getElementById("numero-resenas").value,
+          url_imagen: document.getElementById("url-imagen").value,
+        };
+
+        fetch("http://localhost:8001/admin/productos", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(nuevoProducto),
+        })
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error("Error al agregar producto");
+            }
+            return response.json();
+          })
+          .then((data) => {
+            closeModal("add-producto-modal");
+            document.getElementById("add-producto-form").reset();
+            showNotification("Producto agregado correctamente", "success");
+            cargarProductos();
+          })
+          .catch((error) => {
+            console.error("Error:", error);
+            showNotification(error.message, "error");
+          });
+      }
+
+      // Preparar formulario para editar producto
+      function editarProducto(id) {
+        const producto = productos.find((p) => p.id === id);
+        if (producto) {
+          document.getElementById("edit-producto-id").value = producto.id;
+          document.getElementById("edit-producto-nombre").value =
+            producto.nombre || "";
+          document.getElementById("edit-precio").value = producto.precio || "";
+          document.getElementById("edit-descripcion").value =
+            producto.descripcion || "";
+          document.getElementById("edit-categoria").value =
+            producto.categoria || "";
+          document.getElementById("edit-disponibilidad").value =
+            producto.disponibilidad ? "1" : "0";
+          document.getElementById("edit-calificacion").value =
+            producto.calificacion || "";
+          document.getElementById("edit-numero-resenas").value =
+            producto.numero_resenas || "";
+          document.getElementById("edit-url-imagen").value =
+            producto.url_imagen || "";
+
+          showModal("edit-producto-modal");
+        }
+      }
+
+      // Actualizar producto
+      function actualizarProducto(e) {
+        e.preventDefault();
+
+        const id = document.getElementById("edit-producto-id").value;
+        const productoActualizado = {
+          nombre: document.getElementById("edit-producto-nombre").value,
+          descripcion: document.getElementById("edit-descripcion").value,
+          precio: document.getElementById("edit-precio").value,
+          categoria: document.getElementById("edit-categoria").value,
+          disponibilidad:
+            document.getElementById("edit-disponibilidad").value === "1",
+          calificacion: document.getElementById("edit-calificacion").value,
+          numero_resenas: document.getElementById("edit-numero-resenas").value,
+          url_imagen: document.getElementById("edit-url-imagen").value,
+        };
+
+        fetch(`http://localhost:8001/admin/productos/${id}`, {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(productoActualizado),
+        })
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error("Error al actualizar producto");
+            }
+            return response.json();
+          })
+          .then((data) => {
+            closeModal("edit-producto-modal");
+            showNotification("Producto actualizado correctamente", "success");
+            cargarProductos();
+          })
+          .catch((error) => {
+            console.error("Error:", error);
+            showNotification(error.message, "error");
+          });
+      }
+
+      // Eliminar producto
+      function eliminarProducto(id) {
+        if (confirm("¿Estás seguro de que deseas eliminar este producto?")) {
+          fetch(`http://localhost:8001/admin/productos/${id}`, {
+            method: "DELETE",
+          })
+            .then((response) => {
+              if (!response.ok) {
+                throw new Error("Error al eliminar producto");
+              }
+              return response.json();
+            })
+            .then((data) => {
+              showNotification("Producto eliminado correctamente", "success");
+              cargarProductos();
+            })
+            .catch((error) => {
+              console.error("Error:", error);
+              showNotification(error.message, "error");
+            });
+        }
+      }
+
+      // Manejo de errores globales para fetch
+      window.addEventListener("unhandledrejection", function (event) {
+        console.error("Error no manejado:", event.reason);
+        showNotification("Ha ocurrido un error de conexión", "error");
+      });
+
+      // Cerrar modales al hacer clic fuera de ellos
+      window.onclick = function (event) {
+        const modales = document.getElementsByClassName("modal");
+        for (let i = 0; i < modales.length; i++) {
+          if (event.target === modales[i]) {
+            modales[i].style.display = "none";
+          }
+        }
+      };
+    </script>
+  </body>
+</html>

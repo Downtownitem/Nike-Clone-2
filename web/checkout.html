@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!DOCTYPE html> +
 <html lang="es">
   <head>
     <meta charset="UTF-8" />
@@ -16,12 +16,10 @@
         box-sizing: border-box;
         font-family: "Montserrat", sans-serif;
       }
-
       body {
         background-color: #f8f9fa;
         color: #333;
       }
-
       .container {
         max-width: 1200px;
         margin: 0 auto;
@@ -30,7 +28,6 @@
         flex-wrap: wrap;
         justify-content: space-between;
       }
-
       h1 {
         width: 100%;
         text-align: center;
@@ -38,7 +35,6 @@
         font-weight: 600;
         color: #333;
       }
-
       .checkout-form {
         width: 65%;
         background: white;
@@ -47,7 +43,6 @@
         padding: 30px;
         margin-bottom: 20px;
       }
-
       .summary {
         width: 30%;
         background: white;
@@ -56,13 +51,11 @@
         padding: 25px;
         align-self: flex-start;
       }
-
       .step {
         display: flex;
         align-items: center;
         margin-bottom: 20px;
       }
-
       .step-number {
         width: 30px;
         height: 30px;
@@ -75,23 +68,19 @@
         margin-right: 15px;
         font-weight: 600;
       }
-
       .step-title {
         font-size: 20px;
         font-weight: 600;
       }
-
       .form-group {
         margin-bottom: 20px;
       }
-
       .form-label {
         display: block;
         margin-bottom: 8px;
         font-size: 14px;
         color: #666;
       }
-
       .form-control {
         width: 100%;
         padding: 12px 15px;
@@ -99,18 +88,15 @@
         border-radius: 5px;
         font-size: 16px;
       }
-
       .row {
         display: flex;
         flex-wrap: wrap;
         margin: 0 -10px;
       }
-
       .col {
         padding: 0 10px;
         flex: 1;
       }
-
       .btn {
         background: #1a1a1a;
         color: white;
@@ -124,18 +110,15 @@
         margin-top: 20px;
         transition: background 0.3s;
       }
-
       .btn:hover {
         background: #333;
       }
-
       .summary-title {
         font-size: 18px;
         font-weight: 600;
         margin-bottom: 20px;
         color: #333;
       }
-
       .promo-code {
         padding: 15px 0;
         border-bottom: 1px solid #e0e0e0;
@@ -145,13 +128,11 @@
         justify-content: space-between;
         align-items: center;
       }
-
       .summary-item {
         display: flex;
         justify-content: space-between;
         margin-bottom: 10px;
       }
-
       .total {
         display: flex;
         justify-content: space-between;
@@ -161,47 +142,39 @@
         padding-top: 15px;
         border-top: 1px solid #e0e0e0;
       }
-
       .product-item {
         display: flex;
         align-items: flex-start;
         padding: 20px 0;
         border-top: 1px solid #e0e0e0;
       }
-
       .product-image {
         width: 70px;
         height: 70px;
         margin-right: 15px;
       }
-
       .product-image img {
         width: 100%;
         height: 100%;
         object-fit: contain;
       }
-
       .product-details {
         flex: 1;
       }
-
       .product-title {
         font-weight: 500;
         margin-bottom: 5px;
       }
-
       .product-price {
         font-weight: 600;
         margin-top: 10px;
         text-align: right;
       }
-
       .delivery-info {
         font-size: 12px;
         color: #666;
         margin-top: 5px;
       }
-
       .quantity-badge {
         display: inline-block;
         width: 20px;
@@ -213,7 +186,6 @@
         margin-right: 10px;
         font-size: 12px;
       }
-
       .checkbox-container {
         display: flex;
         align-items: center;
@@ -331,31 +303,23 @@
         .container {
           flex-direction: column;
         }
-
         .checkout-form,
         .summary {
           width: 100%;
         }
-
         .summary {
           margin-top: 20px;
         }
-
         .row {
           flex-direction: column;
         }
-
         .col {
           margin-bottom: 15px;
         }
       }
-
-      /* Estilo para sección oculta */
       .section-hidden {
         display: none;
       }
-
-      /* Estilo para sección activa */
       .section-active {
         display: block;
       }
@@ -619,7 +583,7 @@
 
         <div class="summary-item">
           <span>Subtotal</span>
-          <span id="subtotal">$ 2.069.900</span>
+          <span id="subtotal">$ 0</span>
         </div>
 
         <div class="summary-item" id="shipping-cost-container">
@@ -629,42 +593,11 @@
 
         <div class="total">
           <span>Total</span>
-          <span id="total">$ 2.069.900</span>
+          <span id="total">$ 0</span>
         </div>
 
-        <div id="product-list">
-          <!-- Producto 1 -->
-          <div class="product-item">
-            <span class="quantity-badge">1</span>
-            <div class="product-image">
-              <img src="/api/placeholder/70/70" alt="Air Jordan" />
-            </div>
-            <div class="product-details">
-              <div class="product-title">
-                Air Jordan 4 Retro "Abundance" HV0823-003 Talla:10 Calzado para
-                mujer
-              </div>
-              <div class="delivery-info">Hasta 4 días hábiles</div>
-              <div class="product-price">$ 1.314.950</div>
-            </div>
-          </div>
-
-          <!-- Producto 2 -->
-          <div class="product-item">
-            <span class="quantity-badge">1</span>
-            <div class="product-image">
-              <img src="/api/placeholder/70/70" alt="Nike Pegasus" />
-            </div>
-            <div class="product-details">
-              <div class="product-title">
-                Nike Pegasus 41 FD2722-001 Talla:8.5 Calzado de correr en
-                carretera para hombre
-              </div>
-              <div class="delivery-info">Hasta 4 días hábiles</div>
-              <div class="product-price">$ 754.950</div>
-            </div>
-          </div>
-        </div>
+        <!-- Aquí se cargarán dinámicamente los productos -->
+        <div id="product-list"></div>
       </div>
     </div>
 
@@ -679,39 +612,67 @@
         "pk_test_51R7MoyFVZtoK32uMs8OXRk1yLWEmLYxhn0fQ7vWT7rclJvnZveo6e1c924rkghttvZJygkwtsbBuljgC0HhYCMKg006sOppzdr"
       );
 
-      // Función para cargar el carrito desde localStorage
+      // Función para cargar el carrito desde localStorage y obtener datos de productos
       function loadCart() {
         const cartData = localStorage.getItem("user_cart");
         if (cartData) {
           try {
             cart = JSON.parse(cartData);
-            updateCartDisplay();
           } catch (e) {
-            console.error("Error parsing cart data:", e);
+            console.error("Error al parsear el carrito:", e);
             cart = {};
           }
-        } else {
-          // Si no hay carrito en localStorage, usar productos de ejemplo
-          cart = {
-            1: { quantity: 1 },
-            2: { quantity: 1 },
-          };
-          updateCartDisplay();
         }
+        loadProductData();
+      }
+
+      // Función para obtener los datos de cada producto necesario
+      function loadProductData() {
+        Object.keys(cart).forEach((productId) => {
+          // Si ya se cargó el producto, no se vuelve a solicitar
+          if (products[productId]) return;
+          fetch("http://localhost:8001/producto/" + productId)
+            .then((response) => response.json())
+            .then((data) => {
+              products[productId] = data;
+              updateCartDisplay();
+            })
+            .catch((error) =>
+              console.error("Error al obtener el producto " + productId, error)
+            );
+        });
       }
 
       // Función para actualizar la visualización del carrito
       function updateCartDisplay() {
         let subtotal = 0;
         const productListElement = document.getElementById("product-list");
+        // Limpiar lista actual
+        productListElement.innerHTML = "";
 
-        // Calcular subtotal
         Object.keys(cart).forEach((productId) => {
-          const product = products[productId];
           const quantity = cart[productId].quantity;
-
+          const product = products[productId];
           if (product) {
-            subtotal += product.price * quantity;
+            subtotal += product.precio * quantity;
+
+            // Crear elemento para el producto
+            const productItem = document.createElement("div");
+            productItem.className = "product-item";
+            productItem.innerHTML = `
+              <span class="quantity-badge">${quantity}</span>
+              <div class="product-image">
+                <img src="${product.url_imagen}" alt="${product.nombre}" />
+              </div>
+              <div class="product-details">
+                <div class="product-title">${product.nombre}</div>
+                <div class="delivery-info">Hasta 4 días hábiles</div>
+                <div class="product-price">$ ${formatNumber(
+                  product.precio
+                )}</div>
+              </div>
+            `;
+            productListElement.appendChild(productItem);
           }
         });
 
@@ -757,7 +718,7 @@
 
       // Event Listeners
       document.addEventListener("DOMContentLoaded", function () {
-        // Cargar carrito desde localStorage
+        // Cargar carrito y productos desde localStorage y endpoint
         loadCart();
 
         // Pre-rellenar algunos campos para demo
@@ -770,7 +731,6 @@
         document
           .getElementById("continue-to-shipping")
           .addEventListener("click", function () {
-            // Obtener datos del formulario
             const name = document.getElementById("name").value;
             const surname = document.getElementById("surname").value;
             const email = document.getElementById("email").value;
@@ -779,7 +739,6 @@
               document.getElementById("document-number").value;
             const phone = document.getElementById("phone").value;
 
-            // Validar formulario
             if (
               !name ||
               !surname ||
@@ -792,19 +751,15 @@
               return;
             }
 
-            // Actualizar información de usuario mostrada
             document.getElementById("user-email").textContent = email;
             document.getElementById(
               "user-name"
             ).textContent = `${name} ${surname}`;
             document.getElementById("user-phone").textContent = phone;
 
-            // Enviar datos de usuario al servidor
             fetch("http://localhost:8001/registrar_usuario", {
               method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-              },
+              headers: { "Content-Type": "application/json" },
               body: JSON.stringify({
                 nombre: name,
                 apellido: surname,
@@ -817,17 +772,13 @@
               .then((response) => response.json())
               .then((data) => {
                 userId = data.id;
-                // Mostrar siguiente paso
                 showStep(2);
-
-                // Pre-rellenar el destinatario
                 document.getElementById(
                   "recipient"
                 ).value = `${name} ${surname}`;
               })
               .catch((error) => {
                 console.error("Error al registrar usuario:", error);
-                // Para propósitos de demo, continuamos de todos modos
                 userId = 1;
                 showStep(2);
               });
@@ -837,15 +788,11 @@
         document
           .getElementById("continue-to-payment")
           .addEventListener("click", function () {
-            // Validar formulario de envío
             const street = document.getElementById("street").value;
-
             if (!street) {
               alert("Por favor ingrese su dirección de entrega.");
               return;
             }
-
-            // Mostrar paso de pago
             showStep(3);
           });
 
@@ -857,7 +804,6 @@
               userId = 1; // Para propósitos de demo
             }
 
-            // Preparar los datos de productos para enviar al servidor
             const productos = {};
             Object.keys(cart).forEach((productId) => {
               productos[productId] = { quantity: cart[productId].quantity };
@@ -865,18 +811,16 @@
 
             fetch("http://localhost:8001/create-checkout-session", {
               method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-              },
+              headers: { "Content-Type": "application/json" },
               body: JSON.stringify({
                 usuario_id: userId,
                 productos: productos,
               }),
             })
               .then((res) => res.json())
-              .then((session) => {
-                return stripe.redirectToCheckout({ sessionId: session.id });
-              })
+              .then((session) =>
+                stripe.redirectToCheckout({ sessionId: session.id })
+              )
               .then((result) => {
                 if (result.error) {
                   alert(result.error.message);
@@ -885,7 +829,6 @@
               .catch((error) => {
                 console.error("Error:", error);
                 alert("Simulando redirección a pasarela de pago...");
-                // Para propósitos de demo
               });
           });
       });

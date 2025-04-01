@@ -52,7 +52,7 @@
           >
           para comprar.
         </p>
-        <button class="nike-button">Comprar</button>
+        <button class="nike-button" onclick="goToShop()" style="cursor: pointer;">Comprar</button>
       </div>
 
       <div
@@ -185,5 +185,11 @@
         </p>
       </div>
     </footer>
+
+    <script>
+      function goToShop() {
+        window.location.href = "/shop.html";
+      }
+    </script>
   </body>
 </html>

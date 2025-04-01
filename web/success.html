@@ -121,7 +121,7 @@
 
       <div class="product-details">
         <div class="detail-row">
-          <span class="label">ID de Producto:</span>
+          <span class="label">ID de pago:</span>
           <span id="product-id" class="value">Cargando...</span>
         </div>
         <div class="detail-row">
@@ -145,12 +145,12 @@
 
     <script>
       document.addEventListener("DOMContentLoaded", function () {
-        // Obtener el ID del producto desde URL
+        // Obtener el session_id desde la URL
         const urlParams = new URLSearchParams(window.location.search);
-        const productId = urlParams.get("product_id") || "No disponible";
+        const sessionId = urlParams.get("session_id") || "No disponible";
 
-        // Mostrar el ID del producto
-        document.getElementById("product-id").textContent = productId;
+        // Mostrar el session_id en la página
+        document.getElementById("product-id").textContent = sessionId.substring(0, 25);
 
         // Mostrar la fecha actual
         const currentDate = new Date();
@@ -160,11 +160,39 @@
           year: "numeric",
         });
         document.getElementById("current-date").textContent = formattedDate;
+
+        // ✅ Llamar al backend para cambiar el estado del pedido a 'completado'
+        if (sessionId !== "No disponible") {
+          fetch("http://localhost:8001/update-order-status", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              session_id: sessionId,
+              estado: "completado",
+            }),
+          })
+            .then((res) => {
+              if (!res.ok) {
+                throw new Error("Error al actualizar el estado del pedido.");
+              } else {
+                console.log("Estado actualizado correctamente.");
+                localStorage.removeItem('user_cart')
+              }
+              return res.json();
+            })
+            .then((data) => {
+              console.log("Estado actualizado correctamente:", data);
+            })
+            .catch((err) => {
+              console.error("Error al actualizar el estado:", err);
+            });
+        }
       });
 
       function goToHomePage() {
-        // Cambiar esto a la URL real de tu tienda
-        window.location.href = "/";
+        window.location.href = "/shop.html";
       }
     </script>
   </body>

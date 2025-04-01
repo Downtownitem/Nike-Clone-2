@@ -4,7 +4,7 @@
       <div class="top-header">
         <a href="#">Eventos</a>
         <a href="#">Ayuda</a>
-        <a href="#">Regístrate</a>
+        <a href="/admin.html">Admin</a>
         <a href="#">Buscar tienda</a>
       </div>
   
