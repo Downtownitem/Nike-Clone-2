@@ -22,18 +22,17 @@ app.post("/create-checkout-session", async (req, res) => {
 
   try {
     const productIds = Object.keys(productos).map((id) => parseInt(id));
-    const query = `
-      SELECT id, nombre, descripcion, precio
-      FROM productos
-      WHERE id = ANY($1)
-    `;
-    const result = await pool.query(query, [productIds]);
 
-    if (result.rows.length === 0) {
+    const placeholders = productIds.map(() => '?').join(','); // "?, ?, ?"
+    const query = `SELECT id, nombre, descripcion, precio FROM productos WHERE id IN (${placeholders})`;
+
+    const [rows] = await pool.query(query, productIds);
+
+    if (rows.length === 0) {
       return res.status(404).json({ error: "No se encontraron productos" });
     }
 
-    const line_items = result.rows.map((producto) => {
+    const line_items = rows.map((producto) => {
       const quantity = productos[producto.id]?.quantity || 1;
       return {
         price_data: {
@@ -42,7 +41,7 @@ app.post("/create-checkout-session", async (req, res) => {
             name: producto.nombre,
             description: producto.descripcion,
           },
-          unit_amount: Math.round(parseFloat(producto.precio) * 100), // Stripe usa centavos
+          unit_amount: Math.round(parseFloat(producto.precio) * 100),
         },
         quantity,
       };
@@ -75,29 +74,26 @@ app.post("/registrar_usuario", async (req, res) => {
   }
 
   try {
-    const result = await pool.query(
+    const [result] = await pool.query(
       `
       INSERT INTO usuarios (nombre, apellido, email, document_type, document, phone_number)
-      VALUES ($1, $2, $3, $4, $5, $6)
-      RETURNING id
-      `,
+      VALUES (?, ?, ?, ?, ?, ?)
+    `,
       [nombre, apellido, email, document_type, document, phone_number]
     );
 
-    res.json({ id: result.rows[0].id });
+    res.json({ id: result.insertId });
   } catch (error) {
     console.error("Error al insertar usuario:", error);
-
-    // Evita exponer errores de base de datos al cliente en producción
     res.status(500).json({ error: "Error al insertar usuario" });
   }
 });
 
 app.get("/productos", async (req, res) => {
   try {
-    const result = await pool.query("SELECT * FROM productos");
+    const [rows] = await pool.query("SELECT * FROM productos");
 
-    const productos = result.rows.map((producto) => ({
+    const productos = rows.map((producto) => ({
       id: producto.id,
       nombre: producto.nombre,
       descripcion: producto.descripcion,
@@ -120,15 +116,13 @@ app.get("/producto/:id", async (req, res) => {
   const id = parseInt(req.params.id);
 
   try {
-    const result = await pool.query("SELECT * FROM productos WHERE id = $1", [
-      id,
-    ]);
+    const [rows] = await pool.query("SELECT * FROM productos WHERE id = ?", [id]);
 
-    if (result.rows.length === 0) {
+    if (rows.length === 0) {
       return res.status(404).json({ error: "Producto no encontrado" });
     }
 
-    const producto = result.rows[0];
+    const producto = rows[0];
 
     const formattedProducto = {
       id: producto.id,

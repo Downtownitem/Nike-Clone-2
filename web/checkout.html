@@ -1,0 +1,894 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Checkout</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://js.stripe.com/v3/"></script>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Montserrat", sans-serif;
+      }
+
+      body {
+        background-color: #f8f9fa;
+        color: #333;
+      }
+
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+      }
+
+      h1 {
+        width: 100%;
+        text-align: center;
+        margin-bottom: 30px;
+        font-weight: 600;
+        color: #333;
+      }
+
+      .checkout-form {
+        width: 65%;
+        background: white;
+        border: 1px solid #e0e0e0;
+        border-radius: 8px;
+        padding: 30px;
+        margin-bottom: 20px;
+      }
+
+      .summary {
+        width: 30%;
+        background: white;
+        border: 1px solid #e0e0e0;
+        border-radius: 8px;
+        padding: 25px;
+        align-self: flex-start;
+      }
+
+      .step {
+        display: flex;
+        align-items: center;
+        margin-bottom: 20px;
+      }
+
+      .step-number {
+        width: 30px;
+        height: 30px;
+        background: #fff;
+        border: 1px solid #333;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: 15px;
+        font-weight: 600;
+      }
+
+      .step-title {
+        font-size: 20px;
+        font-weight: 600;
+      }
+
+      .form-group {
+        margin-bottom: 20px;
+      }
+
+      .form-label {
+        display: block;
+        margin-bottom: 8px;
+        font-size: 14px;
+        color: #666;
+      }
+
+      .form-control {
+        width: 100%;
+        padding: 12px 15px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        font-size: 16px;
+      }
+
+      .row {
+        display: flex;
+        flex-wrap: wrap;
+        margin: 0 -10px;
+      }
+
+      .col {
+        padding: 0 10px;
+        flex: 1;
+      }
+
+      .btn {
+        background: #1a1a1a;
+        color: white;
+        border: none;
+        border-radius: 25px;
+        padding: 12px 25px;
+        font-size: 16px;
+        cursor: pointer;
+        display: block;
+        width: 100%;
+        margin-top: 20px;
+        transition: background 0.3s;
+      }
+
+      .btn:hover {
+        background: #333;
+      }
+
+      .summary-title {
+        font-size: 18px;
+        font-weight: 600;
+        margin-bottom: 20px;
+        color: #333;
+      }
+
+      .promo-code {
+        padding: 15px 0;
+        border-bottom: 1px solid #e0e0e0;
+        margin-bottom: 15px;
+        cursor: pointer;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .summary-item {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 10px;
+      }
+
+      .total {
+        display: flex;
+        justify-content: space-between;
+        font-size: 18px;
+        font-weight: 600;
+        margin-top: 10px;
+        padding-top: 15px;
+        border-top: 1px solid #e0e0e0;
+      }
+
+      .product-item {
+        display: flex;
+        align-items: flex-start;
+        padding: 20px 0;
+        border-top: 1px solid #e0e0e0;
+      }
+
+      .product-image {
+        width: 70px;
+        height: 70px;
+        margin-right: 15px;
+      }
+
+      .product-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+      }
+
+      .product-details {
+        flex: 1;
+      }
+
+      .product-title {
+        font-weight: 500;
+        margin-bottom: 5px;
+      }
+
+      .product-price {
+        font-weight: 600;
+        margin-top: 10px;
+        text-align: right;
+      }
+
+      .delivery-info {
+        font-size: 12px;
+        color: #666;
+        margin-top: 5px;
+      }
+
+      .quantity-badge {
+        display: inline-block;
+        width: 20px;
+        height: 20px;
+        background: #f4f4f4;
+        border-radius: 50%;
+        text-align: center;
+        line-height: 20px;
+        margin-right: 10px;
+        font-size: 12px;
+      }
+
+      .checkbox-container {
+        display: flex;
+        align-items: center;
+        margin-top: 15px;
+      }
+
+      .form-check {
+        margin-right: 10px;
+      }
+
+      .form-check-label {
+        font-size: 14px;
+      }
+
+      .address-input {
+        display: flex;
+        align-items: center;
+        padding: 12px 15px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        margin-top: 5px;
+      }
+
+      .address-icon {
+        margin-right: 10px;
+        color: #888;
+      }
+
+      .delivery-method {
+        border: 1px solid #e0e0e0;
+        border-radius: 5px;
+        padding: 15px;
+        margin-top: 10px;
+        display: flex;
+        align-items: center;
+      }
+
+      .radio-container {
+        margin-right: 10px;
+      }
+
+      .method-details {
+        flex: 1;
+      }
+
+      .method-price {
+        font-weight: 600;
+      }
+
+      .user-info {
+        padding: 15px;
+        background-color: #fff;
+        border-radius: 5px;
+        margin-bottom: 20px;
+      }
+
+      .user-info p {
+        margin: 5px 0;
+        font-size: 14px;
+      }
+
+      .dropdown-arrow {
+        width: 20px;
+        height: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .change-link {
+        color: #0066cc;
+        text-decoration: none;
+        font-size: 14px;
+        margin-left: 10px;
+      }
+
+      /* Rediseño de radio button */
+      .custom-radio {
+        position: relative;
+        display: inline-block;
+        width: 18px;
+        height: 18px;
+      }
+
+      .custom-radio input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+      }
+
+      .checkmark {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 18px;
+        height: 18px;
+        background-color: #fff;
+        border: 1px solid #ccc;
+        border-radius: 50%;
+      }
+
+      .custom-radio input:checked ~ .checkmark:after {
+        content: "";
+        position: absolute;
+        top: 4px;
+        left: 4px;
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: #000;
+      }
+
+      /* Estilos para pantallas más pequeñas */
+      @media (max-width: 768px) {
+        .container {
+          flex-direction: column;
+        }
+
+        .checkout-form,
+        .summary {
+          width: 100%;
+        }
+
+        .summary {
+          margin-top: 20px;
+        }
+
+        .row {
+          flex-direction: column;
+        }
+
+        .col {
+          margin-bottom: 15px;
+        }
+      }
+
+      /* Estilo para sección oculta */
+      .section-hidden {
+        display: none;
+      }
+
+      /* Estilo para sección activa */
+      .section-active {
+        display: block;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Checkout</h1>
+
+      <!-- Formulario de Checkout -->
+      <div class="checkout-form" id="checkout-process">
+        <!-- Información del usuario (visible en paso 2) -->
+        <div id="user-info" class="user-info" style="display: none">
+          <p id="user-email">danielenriquemm@gmail.com</p>
+          <p id="user-name">Daniel Martinez</p>
+          <p id="user-phone">301 684 5804</p>
+        </div>
+
+        <!-- Sección 1: Datos Personales -->
+        <div id="step1" class="section-active">
+          <div class="step">
+            <div class="step-number">1</div>
+            <div class="step-title">Datos Personales</div>
+          </div>
+
+          <p style="margin-bottom: 20px">
+            Solicitamos únicamente la información esencial para la finalización
+            de la compra.
+          </p>
+
+          <form id="personal-form">
+            <div class="form-group">
+              <label class="form-label">Correo</label>
+              <input
+                type="email"
+                class="form-control"
+                id="email"
+                placeholder="Correo Electrónico *"
+                required
+              />
+            </div>
+
+            <div class="row">
+              <div class="col">
+                <div class="form-group">
+                  <label class="form-label">Nombre</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="name"
+                    placeholder="Nombre *"
+                    required
+                  />
+                </div>
+              </div>
+              <div class="col">
+                <div class="form-group">
+                  <label class="form-label">Apellidos</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="surname"
+                    placeholder="Apellido *"
+                    required
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col">
+                <div class="form-group">
+                  <label class="form-label">Tipo de documento</label>
+                  <select class="form-control" id="document-type" required>
+                    <option value="">Selecciona un tipo</option>
+                    <option value="DNI">DNI</option>
+                    <option value="Pasaporte">Pasaporte</option>
+                    <option value="Cédula">Cédula</option>
+                  </select>
+                </div>
+              </div>
+              <div class="col">
+                <div class="form-group">
+                  <label class="form-label">Número de documento</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="document-number"
+                    required
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Teléfono / Móvil</label>
+              <input
+                type="tel"
+                class="form-control"
+                id="phone"
+                placeholder="999 999 9999"
+                required
+              />
+            </div>
+
+            <div class="form-group">
+              <button
+                type="button"
+                id="add-company-data"
+                style="
+                  background: none;
+                  border: none;
+                  color: #0066cc;
+                  cursor: pointer;
+                  padding: 0;
+                  text-align: left;
+                "
+              >
+                Sumar datos de empresa
+              </button>
+            </div>
+
+            <div class="checkbox-container">
+              <input type="checkbox" class="form-check" id="newsletter" />
+              <label class="form-check-label" for="newsletter"
+                >Quiero recibir el newsletter con promociones.</label
+              >
+            </div>
+
+            <button type="button" id="continue-to-shipping" class="btn">
+              Guardar y continuar
+            </button>
+          </form>
+        </div>
+
+        <!-- Sección 2: Envío -->
+        <div id="step2" class="section-hidden">
+          <div class="step">
+            <div class="step-number">2</div>
+            <div class="step-title">Envío</div>
+          </div>
+
+          <form id="shipping-form">
+            <div class="row">
+              <div class="col">
+                <div class="form-group">
+                  <label class="form-label">Departamento</label>
+                  <select class="form-control" id="department" required>
+                    <option value="Atlántico">Atlántico</option>
+                  </select>
+                </div>
+              </div>
+              <div class="col">
+                <div class="form-group">
+                  <label class="form-label">Municipio</label>
+                  <select class="form-control" id="municipality" required>
+                    <option value="Barranquilla">Barranquilla</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Complete su dirección de entrega</label>
+              <div class="address-input">
+                <span class="address-icon">🏠</span>
+                <span>Barranquilla Atlántico</span>
+                <a href="#" class="change-link">Cambiar</a>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Calle</label>
+              <input
+                type="text"
+                class="form-control"
+                id="street"
+                placeholder="Dirección"
+                required
+              />
+            </div>
+
+            <div class="form-group">
+              <label class="form-label"
+                >Información adicional (ej.: apto. 201)</label
+              >
+              <input
+                type="text"
+                class="form-control"
+                id="additional-info"
+                placeholder="Dirección Complementaria"
+              />
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Barrio</label>
+              <input
+                type="text"
+                class="form-control"
+                id="neighborhood"
+                placeholder="Opcional"
+              />
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Destinatario</label>
+              <input
+                type="text"
+                class="form-control"
+                id="recipient"
+                value="Daniel Martinez"
+              />
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Método de entrega</label>
+              <div class="delivery-method">
+                <label class="custom-radio">
+                  <input type="radio" name="delivery-method" checked />
+                  <span class="checkmark"></span>
+                </label>
+                <div class="method-details">
+                  <div>De 1 a 4 días hábiles</div>
+                </div>
+                <div class="method-price">Gratis</div>
+              </div>
+            </div>
+
+            <button type="button" id="continue-to-payment" class="btn">
+              Ir para el pago
+            </button>
+          </form>
+        </div>
+
+        <!-- Sección 3: Pago (se implementará como redirección a Stripe) -->
+        <div id="step3" class="section-hidden">
+          <div class="step">
+            <div class="step-number">3</div>
+            <div class="step-title">Pago</div>
+          </div>
+
+          <p style="margin-bottom: 20px">
+            Serás redirigido a la pasarela de pago seguro de Stripe para
+            completar tu compra.
+          </p>
+
+          <button type="button" id="checkout-button" class="btn">
+            Proceder al pago
+          </button>
+        </div>
+      </div>
+
+      <!-- Resumen de compra -->
+      <div class="summary">
+        <h2 class="summary-title">Resumen de compra</h2>
+
+        <div class="promo-code">
+          <span>¿Tienes un código promocional?</span>
+          <span class="dropdown-arrow">▼</span>
+        </div>
+
+        <div class="summary-item">
+          <span>Subtotal</span>
+          <span id="subtotal">$ 2.069.900</span>
+        </div>
+
+        <div class="summary-item" id="shipping-cost-container">
+          <span>Gastos del envío</span>
+          <span>Gratis</span>
+        </div>
+
+        <div class="total">
+          <span>Total</span>
+          <span id="total">$ 2.069.900</span>
+        </div>
+
+        <div id="product-list">
+          <!-- Producto 1 -->
+          <div class="product-item">
+            <span class="quantity-badge">1</span>
+            <div class="product-image">
+              <img src="/api/placeholder/70/70" alt="Air Jordan" />
+            </div>
+            <div class="product-details">
+              <div class="product-title">
+                Air Jordan 4 Retro "Abundance" HV0823-003 Talla:10 Calzado para
+                mujer
+              </div>
+              <div class="delivery-info">Hasta 4 días hábiles</div>
+              <div class="product-price">$ 1.314.950</div>
+            </div>
+          </div>
+
+          <!-- Producto 2 -->
+          <div class="product-item">
+            <span class="quantity-badge">1</span>
+            <div class="product-image">
+              <img src="/api/placeholder/70/70" alt="Nike Pegasus" />
+            </div>
+            <div class="product-details">
+              <div class="product-title">
+                Nike Pegasus 41 FD2722-001 Talla:8.5 Calzado de correr en
+                carretera para hombre
+              </div>
+              <div class="delivery-info">Hasta 4 días hábiles</div>
+              <div class="product-price">$ 754.950</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // Variables globales
+      let userId = null;
+      let cart = {};
+      let products = {};
+
+      // Inicialización de Stripe
+      const stripe = Stripe(
+        "pk_test_51R7MoyFVZtoK32uMs8OXRk1yLWEmLYxhn0fQ7vWT7rclJvnZveo6e1c924rkghttvZJygkwtsbBuljgC0HhYCMKg006sOppzdr"
+      );
+
+      // Función para cargar el carrito desde localStorage
+      function loadCart() {
+        const cartData = localStorage.getItem("user_cart");
+        if (cartData) {
+          try {
+            cart = JSON.parse(cartData);
+            updateCartDisplay();
+          } catch (e) {
+            console.error("Error parsing cart data:", e);
+            cart = {};
+          }
+        } else {
+          // Si no hay carrito en localStorage, usar productos de ejemplo
+          cart = {
+            1: { quantity: 1 },
+            2: { quantity: 1 },
+          };
+          updateCartDisplay();
+        }
+      }
+
+      // Función para actualizar la visualización del carrito
+      function updateCartDisplay() {
+        let subtotal = 0;
+        const productListElement = document.getElementById("product-list");
+
+        // Calcular subtotal
+        Object.keys(cart).forEach((productId) => {
+          const product = products[productId];
+          const quantity = cart[productId].quantity;
+
+          if (product) {
+            subtotal += product.price * quantity;
+          }
+        });
+
+        // Actualizar totales
+        document.getElementById("subtotal").textContent = `$ ${formatNumber(
+          subtotal
+        )}`;
+        document.getElementById("total").textContent = `$ ${formatNumber(
+          subtotal
+        )}`;
+      }
+
+      // Función para formatear números con puntos como separadores de miles
+      function formatNumber(number) {
+        return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+      }
+
+      // Función para mostrar paso del proceso de checkout
+      function showStep(stepNumber) {
+        document
+          .querySelectorAll(
+            "#checkout-process > div.section-active, #checkout-process > div.section-hidden"
+          )
+          .forEach((step) => {
+            step.classList.remove("section-active");
+            step.classList.add("section-hidden");
+          });
+
+        document
+          .getElementById(`step${stepNumber}`)
+          .classList.remove("section-hidden");
+        document
+          .getElementById(`step${stepNumber}`)
+          .classList.add("section-active");
+
+        // Mostrar información del usuario en pasos 2 y 3
+        if (stepNumber > 1) {
+          document.getElementById("user-info").style.display = "block";
+        } else {
+          document.getElementById("user-info").style.display = "none";
+        }
+      }
+
+      // Event Listeners
+      document.addEventListener("DOMContentLoaded", function () {
+        // Cargar carrito desde localStorage
+        loadCart();
+
+        // Pre-rellenar algunos campos para demo
+        document.getElementById("email").value = "danielenriquemm@gmail.com";
+        document.getElementById("name").value = "Daniel";
+        document.getElementById("surname").value = "Martinez";
+        document.getElementById("phone").value = "301 684 5804";
+
+        // Evento para continuar a envío
+        document
+          .getElementById("continue-to-shipping")
+          .addEventListener("click", function () {
+            // Obtener datos del formulario
+            const name = document.getElementById("name").value;
+            const surname = document.getElementById("surname").value;
+            const email = document.getElementById("email").value;
+            const documentType = document.getElementById("document-type").value;
+            const documentNumber =
+              document.getElementById("document-number").value;
+            const phone = document.getElementById("phone").value;
+
+            // Validar formulario
+            if (
+              !name ||
+              !surname ||
+              !email ||
+              !documentType ||
+              !documentNumber ||
+              !phone
+            ) {
+              alert("Por favor complete todos los campos obligatorios.");
+              return;
+            }
+
+            // Actualizar información de usuario mostrada
+            document.getElementById("user-email").textContent = email;
+            document.getElementById(
+              "user-name"
+            ).textContent = `${name} ${surname}`;
+            document.getElementById("user-phone").textContent = phone;
+
+            // Enviar datos de usuario al servidor
+            fetch("http://localhost:8001/registrar_usuario", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                nombre: name,
+                apellido: surname,
+                email: email,
+                document_type: documentType,
+                document: documentNumber,
+                phone_number: phone,
+              }),
+            })
+              .then((response) => response.json())
+              .then((data) => {
+                userId = data.id;
+                // Mostrar siguiente paso
+                showStep(2);
+
+                // Pre-rellenar el destinatario
+                document.getElementById(
+                  "recipient"
+                ).value = `${name} ${surname}`;
+              })
+              .catch((error) => {
+                console.error("Error al registrar usuario:", error);
+                // Para propósitos de demo, continuamos de todos modos
+                userId = 1;
+                showStep(2);
+              });
+          });
+
+        // Evento para continuar a pago
+        document
+          .getElementById("continue-to-payment")
+          .addEventListener("click", function () {
+            // Validar formulario de envío
+            const street = document.getElementById("street").value;
+
+            if (!street) {
+              alert("Por favor ingrese su dirección de entrega.");
+              return;
+            }
+
+            // Mostrar paso de pago
+            showStep(3);
+          });
+
+        // Configurar botón de pago con Stripe
+        document
+          .getElementById("checkout-button")
+          .addEventListener("click", () => {
+            if (!userId) {
+              userId = 1; // Para propósitos de demo
+            }
+
+            // Preparar los datos de productos para enviar al servidor
+            const productos = {};
+            Object.keys(cart).forEach((productId) => {
+              productos[productId] = { quantity: cart[productId].quantity };
+            });
+
+            fetch("http://localhost:8001/create-checkout-session", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                usuario_id: userId,
+                productos: productos,
+              }),
+            })
+              .then((res) => res.json())
+              .then((session) => {
+                return stripe.redirectToCheckout({ sessionId: session.id });
+              })
+              .then((result) => {
+                if (result.error) {
+                  alert(result.error.message);
+                }
+              })
+              .catch((error) => {
+                console.error("Error:", error);
+                alert("Simulando redirección a pasarela de pago...");
+                // Para propósitos de demo
+              });
+          });
+      });
+    </script>
+  </body>
+</html>

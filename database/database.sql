@@ -1,61 +1,59 @@
-CREATE DATABASE tienda_virtual;
+CREATE TABLE usuarios (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCHAR(255) NOT NULL,
+    email VARCHAR(255) NOT NULL UNIQUE,
+    apellido VARCHAR(255),
+    document_type VARCHAR(255),
+    document VARCHAR(255),
+    phone_number VARCHAR(255)
+);
 
-create table
-    usuarios (
-        id serial primary key,
-        nombre varchar(255) not null,
-        email varchar(255) not null unique,
-        apellido varchar,
-        document_type varchar,
-        document varchar,
-        phone_number varchar
-    );
+CREATE TABLE productos (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCHAR(255) NOT NULL,
+    descripcion TEXT,
+    precio DECIMAL(10, 2),
+    categoria VARCHAR(100),
+    disponibilidad BOOLEAN,
+    calificacion FLOAT,
+    numero_resenas INT,
+    url_imagen TEXT
+);
 
-CREATE TABLE
-    productos (
-        id INT PRIMARY KEY,
-        nombre VARCHAR(255) NOT NULL,
-        descripcion TEXT,
-        precio NUMERIC(10, 2),
-        categoria VARCHAR(100),
-        disponibilidad BOOLEAN,
-        calificacion FLOAT,
-        numero_resenas INT,
-        url_imagen TEXT
-    );
+CREATE TABLE carritos (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    usuario_id INT,
+    creado_en TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE CASCADE
+);
 
-CREATE TABLE
-    carritos (
-        id SERIAL PRIMARY KEY,
-        usuario_id INT REFERENCES usuarios (id) ON DELETE CASCADE,
-        creado_en TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-    );
+CREATE TABLE carrito_items (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    carrito_id INT,
+    producto_id INT,
+    cantidad INT DEFAULT 1,
+    UNIQUE (carrito_id, producto_id),
+    FOREIGN KEY (carrito_id) REFERENCES carritos(id) ON DELETE CASCADE,
+    FOREIGN KEY (producto_id) REFERENCES productos(id)
+);
 
-CREATE TABLE
-    carrito_items (
-        id SERIAL PRIMARY KEY,
-        carrito_id INT REFERENCES carritos (id) ON DELETE CASCADE,
-        producto_id INT REFERENCES productos (id),
-        cantidad INT DEFAULT 1,
-        UNIQUE (carrito_id, producto_id)
-    );
+CREATE TABLE pedidos (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    usuario_id INT,
+    fecha_pedido TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    total DECIMAL(10, 2),
+    FOREIGN KEY (usuario_id) REFERENCES usuarios(id)
+);
 
-CREATE TABLE
-    pedidos (
-        id SERIAL PRIMARY KEY,
-        usuario_id INT REFERENCES usuarios (id),
-        fecha_pedido TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-        total NUMERIC(10, 2)
-    );
-
-CREATE TABLE
-    detalle_pedidos (
-        id SERIAL PRIMARY KEY,
-        pedido_id INT REFERENCES pedidos (id),
-        producto_id INT REFERENCES productos (id),
-        cantidad INT,
-        precio NUMERIC(10, 2)
-    );
+CREATE TABLE detalle_pedidos (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    pedido_id INT,
+    producto_id INT,
+    cantidad INT,
+    precio DECIMAL(10, 2),
+    FOREIGN KEY (pedido_id) REFERENCES pedidos(id),
+    FOREIGN KEY (producto_id) REFERENCES productos(id)
+);
 
 INSERT INTO
     productos (

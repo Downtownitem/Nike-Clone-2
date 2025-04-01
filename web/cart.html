@@ -534,10 +534,19 @@
         });
       });
 
-    // Add event listener to back-button
-    document.querySelector(".back-button").addEventListener("click", function () {
-      window.location.href = "shop.html";
-    });
+      // Add event listener to back-button
+      document
+        .querySelector(".back-button")
+        .addEventListener("click", function () {
+          window.location.href = "shop.html";
+        });
+
+      // Redirigir al checkout.html al hacer clic en el botón de checkout
+      document
+        .querySelector(".checkout-btn")
+        .addEventListener("click", () => {
+          window.location.href = "/checkout.html";
+        });
     </script>
     <script src="js/include_header.js"></script>
   </body>

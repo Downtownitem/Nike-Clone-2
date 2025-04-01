@@ -19,14 +19,28 @@ services:
       - /app/node_modules
 
   database:
-    build: 
-        context: ./database
-        dockerfile: Dockerfile
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: nike_clone
+      MYSQL_DATABASE: nike_clone
+      MYSQL_USER: nike_clone
+      MYSQL_PASSWORD: nike_clone
     ports:
-      - "8002:5432"
+      - "8002:3306"
     volumes:
-      - database_data:/var/lib/postgresql/data
+      - database_data:/var/lib/mysql
       - ./database/database.sql:/docker-entrypoint-initdb.d/database.sql
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    environment:
+      PMA_HOST: database
+      PMA_PORT: 3306
+      MYSQL_ROOT_PASSWORD: nike_clone
+    ports:
+      - "8003:80"
+    depends_on:
+      - database
 
 volumes:
   database_data:
